@@ -29,6 +29,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
     padding: 18px 40px;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(20px);
@@ -43,6 +44,7 @@ body {
 }
 
 .nav-logo {
+    min-width: 0;
     font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
@@ -55,8 +57,17 @@ body {
 }
 
 .nav-logo img {
-    height: 1.5rem;
+    /* Match the previous wordmark's width despite the taller artwork. */
+    width: 6.94rem;
+    max-width: 100%;
+    height: auto;
+    display: block;
     object-fit: contain;
+}
+
+#navbar .btn-orange {
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .btn-orange {
@@ -129,7 +140,9 @@ body {
 }
 
 .hero-logotype {
-    height: clamp(3.5rem, 10vw, 7.5rem);
+    width: clamp(16.2rem, 46.27vw, 34.7rem);
+    max-width: calc(100vw - 2rem);
+    height: auto;
     object-fit: contain;
 }
 
