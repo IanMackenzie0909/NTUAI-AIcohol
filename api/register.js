@@ -38,8 +38,8 @@ export default async function handler(req, res) {
 
     // Forward to Google Apps Script
     const payload = {
-        apiKey: API_KEY,
         ...body,
+        apiKey: API_KEY,
     };
 
     try {
@@ -49,9 +49,28 @@ export default async function handler(req, res) {
             body: JSON.stringify(payload),
         });
 
-        // GAS always returns 200 even on redirect; just check it responded
+        // ContentService may return HTTP 200 even when registration failed.
         if (!gasRes.ok) {
             throw new Error(`GAS returned ${gasRes.status}`);
+        }
+
+        let gasData;
+        try {
+            gasData = await gasRes.json();
+        } catch {
+            throw new Error('GAS returned a non-JSON response');
+        }
+
+        // Match the doPost contract: only a confirmed success is accepted.
+        if (gasData?.status !== 'success') {
+            const message = typeof gasData?.message === 'string'
+                ? gasData.message.replaceAll(API_KEY, '[redacted]').slice(0, 300)
+                : 'Missing success status';
+            throw new Error(`GAS rejected registration: ${message}`);
+        }
+
+        if (gasData.mailSent === false) {
+            console.warn('Registration saved, but GAS could not send the confirmation email');
         }
 
         return res.status(200).json({ ok: true });
