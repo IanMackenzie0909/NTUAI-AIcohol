@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIcohol：喝一杯，聊一場跨域職涯的無限可能</title>
+    <meta name="description" content="一場由 NTUAI (臺大 AI 社) 與 Cake 聯手打造的全台首創微醺聊職涯體驗。6 大業界導師，Round Table 深度交流。">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="AIcohol：喝一杯，聊一場跨域職涯的無限可能">
+    <meta property="og:description" content="一場由 NTUAI (臺大 AI 社) 與 Cake 聯手打造的全台首創微醺聊職涯體驗。6 大業界導師，Round Table 深度交流。">
+    <meta property="og:image" content="https://ntuai-aicohol.vercel.app/assets/AIcohol_web_banner.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AIcohol：喝一杯，聊一場跨域職涯的無限可能">
+    <meta name="twitter:description" content="一場由 NTUAI (臺大 AI 社) 與 Cake 聯手打造的全台首創微醺聊職涯體驗。6 大業界導師，Round Table 深度交流。">
+    <meta name="twitter:image" content="https://ntuai-aicohol.vercel.app/assets/AIcohol_web_banner.jpg">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Chiron+Hei+HK&family=Google+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VJZ2K72PMZ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-VJZ2K72PMZ');
+    </script>
+
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "r686l4p8t9");
+    </script>
+
+</head>
+
+<script src="script.js"></script>
+
+<body>
+
+    <!-- ── Navbar ── -->
+    <nav id="navbar" class="hidden">
+        <a href="#hero" class="nav-logo"><img src="./assets/AIcohol_logotype.png" alt="AIcohol"></a>
+        <a href="#register" class="btn-orange">立即預約</a>
+    </nav>
+
+    <!-- ── Hero ── -->
+    <section id="hero">
+        <img src="./assets/AIcohol_avatar_ian.png" alt="侍酒師 Ian" class="hero-avatar ian">
+        <img src="./assets/AIcohol_avatar_amy.png" alt="侍酒師 Amy" class="hero-avatar amy">
+
+        <div class="hero-center">
+            <div class="hero-logos">
+                <img src="./assets/AIcohol_logo.png" alt="Logo">
+            </div>
+            <h1 class="hero-title-wrap">
+                <img src="./assets/AIcohol_logotype.png" alt="AIcohol" class="hero-logotype">
+            </h1>
+            <p class="hero-sub">喝一杯，聊一場跨域職涯的無限可能</p>
+            <a href="#register" class="btn-orange btn-orange-lg">立即預約</a>
+        </div>
+    </section>
+
+    <!-- ── About ── -->
+    <section id="about">
+        <div class="bg"></div>
+        <div class="overlay"></div>
+        <div class="about-content">
+            <div class="about-text">
+                <p>一場由<span class="bold-white">臺大 AI 社</span>與國際人才平台<span class="bold-white"> Cake
+                    </span>聯手打造的全台首創<span class="bold-orange">「微醺聊職涯 × AI 侍酒師」</span>體驗！</p>
+                <p>活動打破傳統單向講座的框架，將嚴肅的職涯探索搬進 Lounge Bar 氛圍的輕鬆場域。</p>
+                <p>報名時，AI 侍酒師將為你客製化調配，推薦最適合你的圓桌特調！</p>
+                <p>現場將提供酒水與精緻小點，並邀請 <span class="bold-orange-lg">6</span>
+                    大類型的業界導師與你進行深度的 Round Table 交流。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Topics ── -->
+    <section id="topics">
+        <div class="topics-wrapper">
+            <div class="topics-header">
+                <h2>圓桌主題介紹</h2>
+                <div class="topics-header-divider"></div>
+            </div>
+
+            <div class="topics-grid">
+
+                <!-- 主題一 -->
+                <div class="topic-card">
+                    <p class="topic-number">1</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-topic-1.jpg" alt="Jeff Hu" class="topic-photo">
+                        <div class="topic-title-area">
+                            <h3 class="topic-title">創新創業家</h3>
+                            <p class="topic-speaker">Jeff Hu</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">AI 新創創辦人，從 0 到 1 的創業血淚、募資挑戰與解決痛點的思維，啟發具創業夢的學生。</p>
+                    <ul class="topic-exp">
+                        <li>Turing Space CEO</li>
+                        <li>行政院 青年諮詢委員</li>
+                        <li>Forbes Asia 30 under 30</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/thejeffhu" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 主題二 -->
+                <div class="topic-card">
+                    <p class="topic-number">2</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-topic-2.jpg" alt="Ray Chang" class="topic-photo">
+                        <div class="topic-title-area">
+                            <h3 class="topic-title">AI 人才轉型實戰</h3>
+                            <p class="topic-speaker">Ray Chang</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">非技術背景如何結合商業洞察，極大化個人品牌競爭力。</p>
+                    <ul class="topic-exp">
+                        <li>跨產業（科技、金融、零售）實戰經驗</li>
+                        <li>IBM / 緯創資通 人資數位轉型專案經驗</li>
+                        <li>LinkedIn 萬人級社群影響力</li>
+                        <li>臺大人資顧問社 特聘課程顧問</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/ray-rs-chang" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 主題三 -->
+                <div class="topic-card">
+                    <p class="topic-number">3</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-topic-3.jpg" alt="Macro Wang" class="topic-photo">
+                        <div class="topic-title-area">
+                            <h3 class="topic-title">國際探險家</h3>
+                            <p class="topic-speaker">Macro Wang</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">跨國科技業的實戰生存術與海外申請策略。</p>
+                    <ul class="topic-exp">
+                        <li>法國里昂管理學院 碩士</li>
+                        <li>跨國（法國、新加坡、越南）科技業經歷</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/marco-yi-hsuan-wang" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 主題四 -->
+                <div class="topic-card">
+                    <p class="topic-number">4</p>
+                    <div class="topic-card-top">
+                        <div class="topic-photos-group">
+                            <img src="./assets/host-topic-4-1.jpg" alt="林奕昕" class="topic-photo">
+                            <img src="./assets/host-topic-4-2.jpg" alt="温冠華" class="topic-photo">
+                            <img src="./assets/host-topic-4-3.jpg" alt="張傑凱" class="topic-photo">
+                        </div>
+                        <div class="topic-title-area">
+                            <h3 class="topic-title">技術領航者</h3>
+                            <p class="topic-speaker">林奕昕、温冠華、張傑凱</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">NTUAI 幹部分享從學術研究到實戰落地的心法與技巧。</p>
+                    <ul class="topic-exp">
+                        <li><strong>林奕昕</strong>｜Appier Campaign Management Intern、Delta Electronics DSO PM
+                            Intern、MarTech Engineer</li>
+                        <li><strong>温冠華</strong>｜Taiwan Mobile SWE Intern、NTUST NLP Lab、Apache Airflow & Mahout
+                            Contributor、SITCON 2025/2026 Speaker、Google DevFest Taipei 2024 AI Speaker</li>
+                        <li><strong>張傑凱</strong>｜Apache Mahout Committer、Ray & KubeRay Core Contributor、ALC Taipei &
+                            OpenSource Events Speaker</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://bigjimmy127.github.io/Jimmy-s-Portfolio/" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+                            </svg>
+                            奕昕
+                        </a>
+                        <a href="https://www.linkedin.com/in/guan-hua-wen-625bb0270/" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                            冠華
+                        </a>
+                        <a href="https://www.linkedin.com/in/jiekaichang" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                            傑凱
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 主題五 -->
+                <div class="topic-card">
+                    <p class="topic-number">5</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-topic-5.jpg" alt="Cheng Che Kuo" class="topic-photo">
+                        <div class="topic-title-area">
+                            <h3 class="topic-title">AI 技術實踐者</h3>
+                            <p class="topic-speaker">Cheng Che Kuo</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">AI 如何真正被應用在工程、產品到團隊與開發流程中。</p>
+                    <ul class="topic-exp">
+                        <li>MetAI Product Manager</li>
+                        <li>USPACE Head of Product</li>
+                        <li>Appier Frontend Engineer</li>
+                        <li>貝殼放大 Product Developer</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/dopplerkuo" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 主題六 -->
+                <div class="topic-card">
+                    <p class="topic-number">6</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-topic-6.jpg" alt="楊淳佑" class="topic-photo">
+                        <div class="topic-title-area">
+                            <h3 class="topic-title">AI 產品實踐</h3>
+                            <p class="topic-speaker">楊淳佑</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">從概念到落地：如何用 AI 解決真實痛點並對齊商業價值。</p>
+                    <ul class="topic-exp">
+                        <li>Tera Thinker Founder & CEO</li>
+                        <li>連續創業家，橫跨文創、媒體、區塊鏈、硬體 IC、AI 垂直領域軟體</li>
+                        <li>帶領 Tera Thinker 入選 HolonIQ 東亞教育科技前 150 大公司，服務全國超過 40% 高中學校</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/chunyou-yang" target="_blank" rel="noopener"
+                            class="topic-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Info Cards ── -->
+    <section id="info">
+        <div class="info-wrapper">
+            <div class="info-section-header">
+                <h2 class="info-section-title">活動資訊</h2>
+                <div class="info-section-divider"></div>
+            </div>
+
+            <div class="info-cards">
+                <!-- Card 1: Time & Location -->
+                <div class="info-card">
+                    <h3>時間與地點</h3>
+
+                    <div class="card-flex-col-6">
+                        <div class="card-flex-row">
+                            <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="card-flex-1">
+                                <p class="card-date">2026/04/24 (五)</p>
+                                <p class="card-time">18:30 - 21:30</p>
+                            </div>
+                        </div>
+
+                        <div class="card-hr"></div>
+
+                        <div class="card-flex-row">
+                            <svg class="card-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <div class="card-flex-1">
+                                <a href="https://maps.app.goo.gl/qFk93n5CXRRbTGFm9" target="_blank"
+                                    class="card-location-link">
+                                    No.9 聚會空間
+                                    <svg class="card-icon-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                </a>
+                                <p class="card-location-sub">台北市公館店</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Price -->
+                <div class="info-card info-card-price">
+                    <div>
+                        <h3>活動費用</h3>
+                        <div class="card-note-box">
+                            <div class="card-note-inner">
+                                <svg class="card-icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <p>確認錄取後再繳納費用，當天未到不予退還。</p>
+                            </div>
+                        </div>
+                        <div class="card-flex-col-4">
+                            <div class="price-row price-row-highlight">
+                                <span class="price-label">NTUAI 社員</span>
+                                <span class="price-value-main">$ 100</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="price-label">非 NTUAI 社員</span>
+                                <span class="price-value-sub">$ 300</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Agenda -->
+                <div class="info-card">
+                    <h3>當日流程</h3>
+
+                    <div class="agenda">
+                        <div class="agenda-card">
+                            <span class="agenda-time">18:30</span>
+                            <div class="agenda-divider"></div>
+                            <div class="agenda-body">
+                                <p class="agenda-title">開場介紹與破冰</p>
+                            </div>
+                        </div>
+
+                        <div class="agenda-card">
+                            <span class="agenda-time">19:00</span>
+                            <div class="agenda-divider"></div>
+                            <div class="agenda-body">
+                                <p class="agenda-title">深度輪桌交流</p>
+                                <p class="agenda-sub">共 3 輪 / 每輪 30 分鐘</p>
+                            </div>
+                        </div>
+
+                        <div class="agenda-card">
+                            <span class="agenda-time">20:30</span>
+                            <div class="agenda-divider"></div>
+                            <div class="agenda-body">
+                                <p class="agenda-title">自由 Networking</p>
+                            </div>
+                        </div>
+
+                        <div class="agenda-card">
+                            <span class="agenda-time">21:10</span>
+                            <div class="agenda-divider"></div>
+                            <div class="agenda-body">
+                                <p class="agenda-title">綜合探討與 Q&A</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Registration ── -->
+    <section id="register">
+        <div class="reg-card">
+
+            <div class="success-screen closed-screen hidden">
+                <div class="success-icon closed-icon">
+                    <svg width="32" height="32" fill="none" stroke="#fbbf24" stroke-width="2.5" viewBox="0 0 24 24">
+                        <rect x="4.5" y="10.5" width="15" height="10" rx="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10.5V7a4 4 0 018 0v3.5" />
+                    </svg>
+                </div>
+                <h2 class="success-heading">報名已截止</h2>
+                <p class="success-text">
+                    感謝您的關注與支持！<br>
+                    期待下次再見。
+                </p>
+            </div>
+
+            <form id="registrationForm">
+
+                <!-- ── Step 1 ── -->
+                <div id="step1" class="form-step form-step-inner">
+                    <h2 class="form-heading">預約您的探索席位</h2>
+                    <p class="form-subtext">請填寫基礎資訊，以利建立您的探索檔案。</p>
+
+                    <div class="form-grid-2">
+                        <div>
+                            <label class="field-label">姓名</label>
+                            <input type="text" id="name" class="field-input" placeholder="請填寫中文全名">
+                            <p id="nameError" class="hidden field-error">請填寫正確的中文全名</p>
+                        </div>
+                        <div>
+                            <label class="field-label">電話</label>
+                            <input type="tel" id="phone" class="field-input" placeholder="09xxxxxxxx">
+                            <p id="phoneError" class="hidden field-error">請填寫正確的台灣手機格式</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="field-label">Email</label>
+                        <input type="email" id="email" class="field-input" placeholder="example@gmail.com">
+                        <p id="emailError" class="hidden field-error">請檢查 Email 格式</p>
+                    </div>
+
+                    <div class="form-grid-2">
+                        <div>
+                            <label class="field-label">目前身分</label>
+                            <select id="userStatus" class="field-input">
+                                <option value="" disabled selected>請選擇</option>
+                                <option value="student">學生</option>
+                                <option value="employed">在職</option>
+                                <option value="unemployed">待業</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label">NTUAI 身分</label>
+                            <select id="ntuaiId" class="field-input">
+                                <option value="none">非社員</option>
+                                <option value="member">社員</option>
+                                <option value="executive">幹部</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic detail fields -->
+                    <div id="statusDetails" class="hidden form-group">
+                        <div class="detail-row" id="detailRow1">
+                            <div id="field1Container">
+                                <label id="label1" class="field-label"></label>
+                                <input type="text" id="profDetail1" class="field-input" placeholder="例如：國立台灣大學">
+                            </div>
+                            <div id="field2Container">
+                                <label id="label2" class="field-label"></label>
+                                <input type="text" id="profDetail2" class="field-input" placeholder="例如：大三">
+                            </div>
+                        </div>
+                        <div id="field3Container" class="hidden detail-extra">
+                            <label id="label3" class="field-label">年級</label>
+                            <input type="text" id="profDetail3" class="field-input" placeholder="例如：三年級">
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="nextStep(2)" class="btn-primary btn-mt">下一步</button>
+                </div>
+
+                <!-- ── Step 2 ── -->
+                <div id="step2" class="form-step hidden form-step-inner">
+                    <h2 class="form-heading">讓我們了解你</h2>
+                    <p class="form-subtext">請輸入三個關鍵字，這將呈現在您的活動名牌上。</p>
+
+                    <div class="form-grid-3">
+                        <input type="text" id="tag1" class="field-input field-input--center" placeholder="#標籤1">
+                        <input type="text" id="tag2" class="field-input field-input--center" placeholder="#標籤2">
+                        <input type="text" id="tag3" class="field-input field-input--center" placeholder="#標籤3">
+                    </div>
+
+                    <div class="form-group-lg">
+                        <label class="field-label">個人經歷與報名動機</label>
+                        <textarea id="motivation" rows="5" required class="field-input field-textarea"
+                            placeholder="請分享您過去的經歷、專長與想參加這次活動的原因..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" onclick="nextStep(1)" class="btn-secondary btn-flex-1">上一步</button>
+                        <button type="button" onclick="nextStep(3)" class="btn-primary btn-flex-2">探索與主題推薦</button>
+                    </div>
+                </div>
+
+                <!-- ── Step 3 ── -->
+                <div id="step3" class="form-step hidden">
+                    <div class="step3-grid">
+                        <!-- Left: AI recommendation -->
+                        <div>
+                            <div class="sommelier-header">
+                                <img src="./assets/AIcohol_avatar_message.png" alt="Ian & Amy" class="sommelier-avatar">
+                                <div>
+                                    <p class="sommelier-name">Ian & Amy</p>
+                                    <p class="sommelier-subtitle">AI 侍酒師</p>
+                                </div>
+                            </div>
+
+                            <!-- Loading -->
+                            <div id="recomLoading" class="recom-loading">
+                                <span class="spinner"></span>
+                                <span class="recom-loading-text">AI 侍酒師正在為您調配專屬品酒單...</span>
+                            </div>
+
+                            <!-- Result -->
+                            <div id="recomResult" class="hidden">
+                                <p id="recomReason" class="recom-reason"></p>
+                            </div>
+
+                            <!-- Error -->
+                            <div id="recomError" class="hidden recom-error">
+                                推薦服務暫時無法使用，已為您提供預設排序。
+                            </div>
+
+                            <p class="recom-hint">
+                                AI 推薦僅供參考。<br>
+                                你最終只會被分配到三個主題圓桌，且此排序不代表最終結果。
+                            </p>
+                        </div>
+
+                        <!-- Right: Ranking list -->
+                        <div>
+                            <p class="ranking-label">圓桌志願排序</p>
+                            <p class="ranking-hint">長按卡片即可拖曳調整順序</p>
+                            <div id="rankingList" class="ranking-list"></div>
+                        </div>
+                    </div>
+
+                    <label class="form-confirm">
+                        <input type="checkbox" id="confirmCheckbox" required>
+                        <span>我了解送出預約後不代表獲得錄取名額，需等待後續 E-mail 通知</span>
+                    </label>
+
+                    <div class="form-actions-mt">
+                        <button type="button" onclick="nextStep(2)" class="btn-secondary btn-flex-1">上一步</button>
+                        <button type="submit" id="submitBtn" class="btn-primary btn-flex-2">送出預約</button>
+                    </div>
+                </div>
+
+                <!-- ── Success ── -->
+                <div id="successScreen" class="hidden success-screen">
+                    <div class="success-icon">
+                        <svg width="32" height="32" fill="none" stroke="#4ade80" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                    </div>
+                    <h2 class="success-heading">申請已送出</h2>
+                    <p class="success-text">
+                        感謝你的申請，我們收到了！<br>
+                        將會在活動前透過 E-mail 通知您的申請結果，敬請留意。
+                    </p>
+                </div>
+
+            </form>
+
+            <div id="resultMessage" class="hidden result-message"></div>
+        </div>
+    </section>
+
+    <!-- ── Notice ── -->
+    <section id="notice">
+        <h2 class="notice-title">注意事項</h2>
+        <ul class="notice-list">
+            <li><strong>活動報名：</strong>目前已公告第一梯圓桌清單，後續預約的來賓需稍候通知。</li>
+            <li><strong>集合資訊：</strong>請自行前往、準時抵達活動地點，切勿遲到。</li>
+            <li><strong>服裝要求：</strong>請著舒適得體的服裝（建議 Smart Casual）。</li>
+            <li><strong>必備證件：</strong>請務必攜帶有效身分證件（如：身分證、學生證）。</li>
+            <li><strong>影像授權：</strong>活動過程中將進行攝錄影。報名即表示您同意 NTUAI 及相關合作夥伴，將活動素材用於後續宣傳。</li>
+            <li><strong>報名確認：</strong>本活動有人數限制。提交報名表單不代表成功錄取，最終錄取結果將以 E-mail 通知為準。</li>
+            <li><strong>資訊免責：</strong>NTUAI 所提供之資訊僅為宣傳用途，不保證本頁所有講者資訊皆正確。</li>
+            <li><strong>資料授權：</strong>您本次填寫的所有內容僅供 NTUAI 活動使用。</li>
+        </ul>
+        <div class="notice-links">
+            <a href="https://linktr.ee/ntuai" target="_blank" rel="noopener">
+                <svg class="globe" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M2 12h20" />
+                    <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                Linktree
+            </a>
+            <a href="https://ig.me/m/ntuaiclub" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                </svg>
+                IG 線上諮詢
+            </a>
+            <a href="https://www.linkedin.com/company/ntuai" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24">
+                    <path
+                        d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+                LinkedIn
+            </a>
+        </div>
+    </section>
+
+    <!-- ── Footer ── -->
+    <footer>
+        <p class="footer-text">© NTUAI &nbsp;｜&nbsp; 未成年請勿飲酒，飲酒過量有害健康。</p>
+    </footer>
+
+</body>
+
+</html>
