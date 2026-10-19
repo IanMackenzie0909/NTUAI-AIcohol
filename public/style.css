@@ -607,6 +607,13 @@ body {
     margin-top: 24px;
 }
 
+.ranking-questions .field-help-note {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.7rem;
+    line-height: 1.5;
+}
+
 .ranking-questions .field-textarea {
     min-height: 150px;
     resize: vertical;
