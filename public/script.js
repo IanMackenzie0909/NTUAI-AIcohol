@@ -258,6 +258,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         ai_order: initialAiOrder,
         ai_reason: initialAiReasons,
         user_order: sortedThemesResult.map(t => themes.indexOf(t) + 1).join(','),
+        table_questions: document.getElementById('tableQuestions').value.trim(),
     };
 
     try {

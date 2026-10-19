@@ -5,3 +5,7 @@ node_modules/
 .vercel
 arch_diagram.html
 arch.ps
+
+docs/
+tests/
+gas/

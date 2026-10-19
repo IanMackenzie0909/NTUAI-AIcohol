@@ -42,14 +42,16 @@ async function submit(extra = {}) {
 
 test('accepts the actual GAS success response and uses the server secret', async () => {
     let forwarded;
+    const tableQuestions = '【創新創業家】如何驗證第一個產品需求？\n【AI 產品實踐】如何評估 AI 功能的商業價值？';
     globalThis.fetch = async (_url, options) => {
         forwarded = JSON.parse(options.body);
         return Response.json({ status: 'success', message: 'Saved' });
     };
-    const res = await submit({ apiKey: 'client-override' });
+    const res = await submit({ apiKey: 'client-override', table_questions: tableQuestions });
     assert.equal(res.statusCode, 200);
     assert.deepEqual(res.body, { ok: true });
     assert.equal(forwarded.apiKey, 'unit-test-shared-secret');
+    assert.equal(forwarded.table_questions, tableQuestions);
 });
 
 test('rejects an application error even when GAS responds with HTTP 200', async () => {
