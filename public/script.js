@@ -37,12 +37,32 @@ const validate = {
 
 // ─── Dynamic status fields ────────────────────────────────────────────────
 const userStatus = document.getElementById('userStatus');
-userStatus.addEventListener('change', function () {
-    const status = this.value;
+const pastBackground = document.getElementById('pastBackground');
+
+function updateStatusDetails() {
+    const status = userStatus.value;
     const statusDetails = document.getElementById('statusDetails');
     const field3Container = document.getElementById('field3Container');
+    const hasOrgDetails = status === 'student' || status === 'employed';
 
-    statusDetails.classList.remove('hidden');
+    statusDetails.classList.toggle('hidden', !hasOrgDetails);
+    ['profDetail1', 'profDetail2'].forEach(id => {
+        const field = document.getElementById(id);
+        field.disabled = !hasOrgDetails;
+        field.required = hasOrgDetails;
+    });
+    field3Container.classList.toggle('hidden', status !== 'student');
+    const grade = document.getElementById('profDetail3');
+    grade.disabled = status !== 'student';
+    grade.required = status === 'student';
+
+    const needsBackground = status === 'unemployed';
+    document.getElementById('pastBackgroundContainer').classList.toggle('hidden', !needsBackground);
+    pastBackground.disabled = !needsBackground;
+    pastBackground.required = needsBackground;
+    pastBackground.removeAttribute('aria-invalid');
+    pastBackground.style.borderColor = '';
+    document.getElementById('pastBackgroundError').classList.add('hidden');
 
     if (status === 'student') {
         document.getElementById('label1').innerText = '學校名稱';
@@ -50,18 +70,35 @@ userStatus.addEventListener('change', function () {
         document.getElementById('label3').innerText = '年級';
         document.getElementById('profDetail1').placeholder = '例如：國立台灣大學';
         document.getElementById('profDetail2').placeholder = '例如：資訊管理學系';
-        document.getElementById('profDetail3').placeholder = '例如：三年級';
-        field3Container.classList.remove('hidden');
     } else if (status === 'employed') {
         document.getElementById('label1').innerText = '公司名稱';
         document.getElementById('label2').innerText = '職稱部門';
         document.getElementById('profDetail1').placeholder = '例如：Cake';
         document.getElementById('profDetail2').placeholder = '例如：產品經理';
-        field3Container.classList.add('hidden');
-    } else {
-        statusDetails.classList.add('hidden');
+    }
+}
+
+userStatus.addEventListener('change', updateStatusDetails);
+updateStatusDetails();
+
+pastBackground.addEventListener('input', () => {
+    if (pastBackground.value.trim()) {
+        pastBackground.removeAttribute('aria-invalid');
+        pastBackground.style.borderColor = '';
+        document.getElementById('pastBackgroundError').classList.add('hidden');
     }
 });
+
+function getStatusDetails() {
+    const status = userStatus.value;
+    const hasOrgDetails = status === 'student' || status === 'employed';
+    return {
+        org: hasOrgDetails ? document.getElementById('profDetail1').value.trim() : '',
+        dept: hasOrgDetails ? document.getElementById('profDetail2').value.trim() : '',
+        grade: status === 'student' ? document.getElementById('profDetail3').value : '',
+        past_background: status === 'unemployed' ? pastBackground.value.trim() : '',
+    };
+}
 
 // ─── Step navigation ──────────────────────────────────────────────────────
 function nextStep(step) {
@@ -74,12 +111,17 @@ function nextStep(step) {
 
             if (status === 'student') required.push('profDetail1', 'profDetail2', 'profDetail3');
             else if (status === 'employed') required.push('profDetail1', 'profDetail2');
+            else if (status === 'unemployed') required.push('pastBackground');
 
             required.forEach(id => {
                 const el = document.getElementById(id);
-                if (!el.value) { el.style.borderColor = 'rgba(248,113,113,0.5)'; valid = false; }
+                if (!el.value.trim()) { el.style.borderColor = 'rgba(248,113,113,0.5)'; valid = false; }
                 else { el.style.borderColor = ''; }
             });
+
+            const missingBackground = status === 'unemployed' && !pastBackground.value.trim();
+            document.getElementById('pastBackgroundError').classList.toggle('hidden', !missingBackground);
+            if (missingBackground) pastBackground.setAttribute('aria-invalid', 'true');
 
             if (!validate.name(document.getElementById('name').value)) { document.getElementById('nameError').classList.remove('hidden'); valid = false; }
             if (!validate.phone(document.getElementById('phone').value)) { document.getElementById('phoneError').classList.remove('hidden'); valid = false; }
@@ -148,9 +190,7 @@ async function generateSmartRecommendations() {
             body: JSON.stringify({
                 name: document.getElementById('name').value,
                 status, tags, motivation,
-                org: document.getElementById('profDetail1').value,
-                dept: document.getElementById('profDetail2').value,
-                grade: document.getElementById('profDetail3').value,
+                ...getStatusDetails(),
             }),
         });
         if (res.ok) {
@@ -241,15 +281,17 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     submitBtn.innerText = '發送中...';
 
     const status = document.getElementById('userStatus').value;
+    const details = getStatusDetails();
 
     const payload = {
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
         email: document.getElementById('email').value,
-        role: (status === 'employed' || status === 'unemployed') ? 'professional' : status,
-        org: document.getElementById('profDetail1').value || 'N/A',
-        dept: document.getElementById('profDetail2').value || 'N/A',
-        grade: document.getElementById('profDetail3').value || 'N/A',
+        role: status === 'employed' ? 'professional' : status,
+        org: details.org || 'N/A',
+        dept: details.dept || 'N/A',
+        grade: details.grade || 'N/A',
+        past_background: details.past_background,
         ntuai_member: document.getElementById('ntuaiId').value,
         hashtag_1: document.getElementById('tag1').value,
         hashtag_2: document.getElementById('tag2').value,

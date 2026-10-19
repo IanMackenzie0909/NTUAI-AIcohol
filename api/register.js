@@ -36,6 +36,10 @@ export default async function handler(req, res) {
         }
     }
 
+    if (body.role === 'unemployed' && (typeof body.past_background !== 'string' || !body.past_background.trim())) {
+        return res.status(400).json({ error: 'Missing or invalid field: past_background' });
+    }
+
     // Forward to Google Apps Script
     const payload = {
         ...body,

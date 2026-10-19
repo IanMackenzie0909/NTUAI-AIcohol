@@ -45,10 +45,9 @@
     </script>
 
     <script src="script.js" defer></script>
+    <script src="feedback.js" defer></script>
 
 </head>
-
-<script src="script.js" defer></script>
 
 <body>
 
@@ -297,6 +296,59 @@
         </div>
     </section>
 
+    <!-- ── Previous Event Feedback ── -->
+    <section id="feedback" class="feedback-section" aria-labelledby="feedbackTitle">
+        <div class="feedback-wrapper">
+            <header class="feedback-header">
+                <h2 id="feedbackTitle">上屆回饋</h2>
+                <div class="feedback-divider" aria-hidden="true"></div>
+            </header>
+
+            <div class="feedback-stats">
+                <p class="feedback-stat"><strong data-count-to="90">90+%</strong> <span>活動滿意！</span></p>
+                <p class="feedback-stat"><strong data-count-to="82">82+%</strong> <span>跨領域學習</span></p>
+            </div>
+
+            <div class="feedback-gallery">
+                <img src="./assets/feedback/AIcohoL-1st-1.jpg" alt="上屆 AIcohol 參與者在圓桌旁專注交流"
+                    width="1200" height="800" loading="lazy" decoding="async">
+                <img src="./assets/feedback/AIcohoL-1st-2.jpg" alt="上屆 AIcohol 講師與參與者的全體合照"
+                    width="1200" height="800" loading="lazy" decoding="async">
+                <img src="./assets/feedback/AIcohoL-1st-3.jpg   " alt="上屆 AIcohol 參與者在自由交流時分享想法"
+                    width="1200" height="800" loading="lazy" decoding="async">
+                <img src="./assets/feedback/AIcohoL-1st-4.jpg" alt="俯視上屆 AIcohol 參與者圍桌討論的現場"
+                    width="1200" height="800" loading="lazy" decoding="async">
+            </div>
+
+            <div class="feedback-carousel" data-feedback-carousel role="region" aria-label="學員回饋" tabindex="0">
+                <div class="feedback-marquee-viewport">
+                    <div class="feedback-marquee-track">
+                        <div id="feedbackQuotes" class="feedback-quotes" aria-live="off">
+                            <div id="feedbackSlide1" class="feedback-slide">
+                                <blockquote class="feedback-quote">
+                                    <span class="feedback-quote-mark" aria-hidden="true">“</span>
+                                    <p>不只是講者，其他來參加的人也都非常厲害…… AIcohol 可以說很大地啟發了我，也讓我未來的學習動機更加堅定。</p>
+                                </blockquote>
+                            </div>
+                            <div id="feedbackSlide2" class="feedback-slide">
+                                <blockquote class="feedback-quote">
+                                    <span class="feedback-quote-mark" aria-hidden="true">“</span>
+                                    <p>在對的時間，找到對的人，說對的話，即可事半功倍，並且永遠抱著『學習與傾聽』的心態。</p>
+                                </blockquote>
+                            </div>
+                            <div id="feedbackSlide3" class="feedback-slide">
+                                <blockquote class="feedback-quote">
+                                    <span class="feedback-quote-mark" aria-hidden="true">“</span>
+                                    <p>講師實戰經驗豐富，有幸認識各路好手並交流 AI 產業與知識。</p>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ── Info Cards ── -->
     <section id="info">
         <div class="info-wrapper">
@@ -462,10 +514,11 @@
 
                     <div class="form-grid-2">
                         <div>
-                            <label class="field-label">目前身分</label>
+                            <label for="userStatus" class="field-label">目前身分</label>
                             <select id="userStatus" class="field-input">
                                 <option value="" disabled selected>請選擇</option>
                                 <option value="student">學生</option>
+                                <option value="recent_graduate">畢業兩年內新鮮人</option>
                                 <option value="employed">在職</option>
                                 <option value="unemployed">待業</option>
                             </select>
@@ -484,18 +537,32 @@
                     <div id="statusDetails" class="hidden form-group">
                         <div class="detail-row" id="detailRow1">
                             <div id="field1Container">
-                                <label id="label1" class="field-label"></label>
-                                <input type="text" id="profDetail1" class="field-input" placeholder="例如：國立台灣大學">
+                                <label for="profDetail1" id="label1" class="field-label"></label>
+                                <input type="text" id="profDetail1" class="field-input" placeholder="例如：國立台灣大學" disabled>
                             </div>
                             <div id="field2Container">
-                                <label id="label2" class="field-label"></label>
-                                <input type="text" id="profDetail2" class="field-input" placeholder="例如：大三">
+                                <label for="profDetail2" id="label2" class="field-label"></label>
+                                <input type="text" id="profDetail2" class="field-input" placeholder="例如：資訊管理學系" disabled>
                             </div>
                         </div>
                         <div id="field3Container" class="hidden detail-extra">
-                            <label id="label3" class="field-label">年級</label>
-                            <input type="text" id="profDetail3" class="field-input" placeholder="例如：三年級">
+                            <label for="profDetail3" id="label3" class="field-label">年級</label>
+                            <select id="profDetail3" class="field-input" disabled>
+                                <option value="" disabled selected>請選擇年級</option>
+                                <option value="大三以下 / 碩一">大三以下 / 碩一</option>
+                                <option value="大四 / 碩二以上應屆畢業生">大四 / 碩二以上應屆畢業生</option>
+                                <option value="博士生">博士生</option>
+                            </select>
                         </div>
+                    </div>
+
+                    <div id="pastBackgroundContainer" class="hidden form-group">
+                        <label for="pastBackground" class="field-label">過去背景（必填）</label>
+                        <p id="pastBackgroundHint" class="field-help">請說明過去的學經歷、工作經驗或專長，作為錄取評分項目之一。</p>
+                        <textarea id="pastBackground" name="past_background" rows="4" class="field-input field-textarea"
+                            aria-describedby="pastBackgroundHint pastBackgroundError"
+                            placeholder="例如：畢業科系、過往工作／專案經驗、目前想探索的方向…" disabled></textarea>
+                        <p id="pastBackgroundError" class="hidden field-error" role="alert">請填寫過去背景後再繼續。</p>
                     </div>
 
                     <button type="button" onclick="nextStep(2)" class="btn-primary btn-mt">下一步</button>
@@ -568,7 +635,7 @@
                             <div class="ranking-questions">
                                 <label for="tableQuestions" class="field-label">希望在 Alcohol 上提問的問題</label>
                                 <p id="tableQuestionsHint" class="field-help">
-                                    請針對你希望加入的前3-5桌次，提出對應想了解的問題。
+                                    請針對所希望加入的前3-5桌次，提出對應想了解的問題。
                                     <small class="field-help-note">(ps. 問題將作為報名篩選的評估標準之一哦~)</small>
                                 </p>
                                 <textarea id="tableQuestions" name="table_questions" rows="6"

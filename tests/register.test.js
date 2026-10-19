@@ -43,15 +43,39 @@ async function submit(extra = {}) {
 test('accepts the actual GAS success response and uses the server secret', async () => {
     let forwarded;
     const tableQuestions = '【創新創業家】如何驗證第一個產品需求？\n【AI 產品實踐】如何評估 AI 功能的商業價值？';
+    const pastBackground = '曾主修資訊管理。\n有兩年產品助理工作經驗。';
     globalThis.fetch = async (_url, options) => {
         forwarded = JSON.parse(options.body);
         return Response.json({ status: 'success', message: 'Saved' });
     };
-    const res = await submit({ apiKey: 'client-override', table_questions: tableQuestions });
+    const res = await submit({ apiKey: 'client-override', role: 'unemployed', table_questions: tableQuestions, past_background: pastBackground });
     assert.equal(res.statusCode, 200);
     assert.deepEqual(res.body, { ok: true });
     assert.equal(forwarded.apiKey, 'unit-test-shared-secret');
     assert.equal(forwarded.table_questions, tableQuestions);
+    assert.equal(forwarded.role, 'unemployed');
+    assert.equal(forwarded.past_background, pastBackground);
+});
+
+test('requires a nonempty background for unemployed applicants before forwarding to GAS', async () => {
+    globalThis.fetch = async () => assert.fail('Invalid registrations must not contact GAS');
+    for (const past_background of [undefined, '', ' \n ', 42]) {
+        const res = await submit({ role: 'unemployed', past_background });
+        assert.equal(res.statusCode, 400);
+        assert.match(res.body.error, /past_background/);
+    }
+});
+
+test('keeps professional and recent graduate roles compatible without a past background', async () => {
+    for (const role of ['professional', 'recent_graduate']) {
+        let forwarded;
+        globalThis.fetch = async (_url, options) => {
+            forwarded = JSON.parse(options.body);
+            return Response.json({ status: 'success' });
+        };
+        assert.equal((await submit({ role })).statusCode, 200);
+        assert.equal(forwarded.role, role);
+    }
 });
 
 test('rejects an application error even when GAS responds with HTTP 200', async () => {
