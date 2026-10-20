@@ -38,7 +38,7 @@ export default async function handler(req, res) {
 
 ## 參與者資料
 - 姓名：${name || '未提供'}
-- 身分：${statusLabel}${status === 'student' ? `\n- 學校：${org || '未提供'}\n- 系所：${dept || '未提供'}\n- 年級：${grade || '未提供'}` : status === 'employed' ? `\n- 公司：${org || '未提供'}\n- 職稱/部門：${dept || '未提供'}` : status === 'unemployed' ? `\n- 過去學經歷／工作背景：${past_background || '未提供'}` : ''}
+- 身分：${statusLabel}${status === 'student' ? `\n- 學校：${org || '未提供'}\n- 系所：${dept || '未提供'}\n- 年級：${grade || '未提供'}` : (status === 'employed' || status === 'recent_graduate') ? `\n- 公司：${org || '未提供'}\n- 職稱/部門：${dept || '未提供'}` : status === 'unemployed' ? `\n- 過去學經歷／工作背景：${past_background || '未提供'}` : ''}
 - 標籤：${tags?.filter(Boolean).join('、') || '未提供'}
 - 報名動機：${motivation}
 

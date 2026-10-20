@@ -43,7 +43,7 @@ function updateStatusDetails() {
     const status = userStatus.value;
     const statusDetails = document.getElementById('statusDetails');
     const field3Container = document.getElementById('field3Container');
-    const hasOrgDetails = status === 'student' || status === 'employed';
+    const hasOrgDetails = ['student', 'employed', 'recent_graduate'].includes(status);
 
     statusDetails.classList.toggle('hidden', !hasOrgDetails);
     ['profDetail1', 'profDetail2'].forEach(id => {
@@ -70,9 +70,9 @@ function updateStatusDetails() {
         document.getElementById('label3').innerText = '年級';
         document.getElementById('profDetail1').placeholder = '例如：國立台灣大學';
         document.getElementById('profDetail2').placeholder = '例如：資訊管理學系';
-    } else if (status === 'employed') {
+    } else if (status === 'employed' || status === 'recent_graduate') {
         document.getElementById('label1').innerText = '公司名稱';
-        document.getElementById('label2').innerText = '職稱部門';
+        document.getElementById('label2').innerText = '現職名稱';
         document.getElementById('profDetail1').placeholder = '例如：Cake';
         document.getElementById('profDetail2').placeholder = '例如：產品經理';
     }
@@ -91,7 +91,7 @@ pastBackground.addEventListener('input', () => {
 
 function getStatusDetails() {
     const status = userStatus.value;
-    const hasOrgDetails = status === 'student' || status === 'employed';
+    const hasOrgDetails = ['student', 'employed', 'recent_graduate'].includes(status);
     return {
         org: hasOrgDetails ? document.getElementById('profDetail1').value.trim() : '',
         dept: hasOrgDetails ? document.getElementById('profDetail2').value.trim() : '',
@@ -110,7 +110,7 @@ function nextStep(step) {
             const required = ['name', 'phone', 'email', 'userStatus'];
 
             if (status === 'student') required.push('profDetail1', 'profDetail2', 'profDetail3');
-            else if (status === 'employed') required.push('profDetail1', 'profDetail2');
+            else if (status === 'employed' || status === 'recent_graduate') required.push('profDetail1', 'profDetail2');
             else if (status === 'unemployed') required.push('pastBackground');
 
             required.forEach(id => {
