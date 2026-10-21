@@ -4,20 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIcohol：喝一杯，聊一場跨域職涯的無限可能</title>
-    <meta name="description" content="一場由 NTUAI (臺大 AI 社) 與 Cake 聯手打造的全台首創微醺聊職涯體驗。6 大業界導師，Round Table 深度交流。">
+    <title>AIcohol：喝一杯，開啟一場跨域職涯的無限可能</title>
+    <meta name="description" content="一場由 NTUAI (臺大 AI 社) 打造的微醺聊職涯體驗。9 大業界導師，Round Table 深度交流。">
     <link rel="icon" type="image/png" href="assets/icon.png">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="AIcohol：喝一杯，聊一場跨域職涯的無限可能">
-    <meta property="og:description" content="一場由 NTUAI (臺大 AI 社) 與 Cake 聯手打造的全台首創微醺聊職涯體驗。6 大業界導師，Round Table 深度交流。">
+    <meta property="og:title" content="AIcohol：喝一杯，開啟一場跨域職涯的無限可能">
+    <meta property="og:description" content="一場由 NTUAI (臺大 AI 社) 打造的微醺聊職涯體驗。9 大業界導師，Round Table 深度交流。">
     <meta property="og:image" content="https://ntuai-aicohol.vercel.app/assets/AIcohol_web_banner.jpg">
     <meta property="og:type" content="website">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AIcohol：喝一杯，聊一場跨域職涯的無限可能">
-    <meta name="twitter:description" content="一場由 NTUAI (臺大 AI 社) 與 Cake 聯手打造的全台首創微醺聊職涯體驗。6 大業界導師，Round Table 深度交流。">
+    <meta name="twitter:title" content="AIcohol：喝一杯，開啟一場跨域職涯的無限可能">
+    <meta name="twitter:description" content="一場由 NTUAI (臺大 AI 社) 打造的微醺聊職涯體驗。9 大業界導師，Round Table 深度交流。">
     <meta name="twitter:image" content="https://ntuai-aicohol.vercel.app/assets/AIcohol_web_banner.jpg">
 
     <link
@@ -75,13 +75,16 @@
     </section>
 
     <!-- ── About ── -->
-    <section id="about">
+    <section id="about" aria-labelledby="about-title">
         <div class="bg"></div>
         <div class="overlay"></div>
         <div class="about-content">
             <div class="about-text">
-                <p>「名額秒殺、高滿意度」的熱烈迴響</p>
-                <p><span class="bold-orange-lg">全台首創「AIcohol 微醺聊職涯」強勢回歸！</span></p>
+                <p class="about-eyebrow">「名額秒殺、高滿意度」的熱烈迴響</p>
+                <h2 id="about-title" class="about-headline">
+                    <span class="about-headline-name">AIcohol 微醺聊職涯</span>
+                    <span class="about-headline-return">！強勢回歸！</span>
+                </h2>
                 <p>活動打破傳統單向講座的框架，提供精緻酒水與小點，將職涯探索搬進輕鬆場域，進行深度的 Round Table 交流。</p>
                 <p>不論你是理工商管文等背景，報名時 AI 侍酒師將為你客製化調配，推薦最適合你的專屬圓桌特調！</p>
                 <p>本屆更擴大邀請 <span class="bold-orange-lg">9</span>
@@ -91,207 +94,217 @@
     </section>
 
     <!-- ── Topics ── -->
-    <section id="topics">
+    <section id="topics" aria-labelledby="topics-title">
         <div class="topics-wrapper">
             <div class="topics-header">
-                <h2>圓桌主題介紹</h2>
+                <h2 id="topics-title">圓桌主題介紹</h2>
                 <div class="topics-header-divider"></div>
             </div>
 
             <div class="topics-grid">
-
-                <!-- 主題一 -->
-                <div class="topic-card">
-                    <p class="topic-number">1</p>
+                <article class="topic-card" data-table="A" data-topic-number="1" aria-labelledby="topic-A-title">
+                    <p class="topic-number" aria-hidden="true">A</p>
                     <div class="topic-card-top">
-                        <img src="./assets/host-Grace-topic-1.jpeg" alt="Grace Pan" class="topic-photo">
+                        <img src="./assets/host-Grace-topic-A.jpeg" alt="潘劭儒 Grace Pan" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <h3 class="topic-title">AI 資訊顧問</h3>
-                            <p class="topic-speaker">Grace Pan</p>
+                            <p class="topic-table-label">TABLE A</p>
+                            <h3 id="topic-A-title" class="topic-title">AI 資訊顧問</h3>
+                            <p class="topic-speaker">潘劭儒 Grace Pan</p>
                         </div>
                     </div>
-                    <p class="topic-focus">從企業痛點診斷到 AI 工具應用，探索非工程背景如何切入 AI 顧問工作，在跨國專案與持續學習中累積職涯競爭力。</p>
+                    <p class="topic-focus">從企業痛點診斷到 AI 工具應用，探索非工程背景如何切入 AI 顧問工作，累積跨國專案與職涯競爭力。</p>
                     <ul class="topic-exp">
-                        <li>Agentic AI、自動化、no-code 工具應用</li>
-                        <li>The AI Collective Taipei Chapter Lead</li>
-                        <li>Lovable Taipei City Lead & Solo Expert Partner</li>
+                        <li>全球財務轉型專案；專精 Agentic AI、自動化與 no-code 工具</li>
+                        <li>The AI Collective 台北分會 Chapter Lead</li>
+                        <li>Lovable 台北 City Lead、Solo Expert Partner</li>
                     </ul>
                     <div class="topic-links">
-                        <a href="https://www.linkedin.com/in/grace--pan/" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            LinkedIn
-                        </a>
+                        <a href="https://www.linkedin.com/in/grace--pan/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="潘劭儒 Grace Pan LinkedIn" title="潘劭儒 Grace Pan LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
                     </div>
-                </div>
+                </article>
 
-                <!-- 主題二 -->
-                <div class="topic-card">
-                    <p class="topic-number">2</p>
+                <article class="topic-card" data-table="B" data-topic-number="2" aria-labelledby="topic-B-title">
+                    <p class="topic-number" aria-hidden="true">B</p>
                     <div class="topic-card-top">
-                        <img src="./assets/host-topic-2.jpg" alt="Ray Chang" class="topic-photo">
+                        <img src="./assets/host-Yueh-Ting-Chen-topic-B.jpg" alt="陳約廷 Yueh-Ting Chen" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <h3 class="topic-title">AI 人才轉型實戰</h3>
-                            <p class="topic-speaker">Ray Chang</p>
+                            <p class="topic-table-label">TABLE B</p>
+                            <h3 id="topic-B-title" class="topic-title">AI 推論與基礎架構</h3>
+                            <p class="topic-speaker">陳約廷 Yueh-Ting Chen</p>
                         </div>
                     </div>
-                    <p class="topic-focus">非技術背景如何結合商業洞察，極大化個人品牌競爭力。</p>
+                    <p class="topic-focus">深入 AI 推論與基礎架構，探索 Agent 工作流如何融入日常工作，並交流開源專案的實戰與協作經驗。</p>
                     <ul class="topic-exp">
-                        <li>跨產業（科技、金融、零售）實戰經驗</li>
-                        <li>IBM / 緯創資通 人資數位轉型專案經驗</li>
-                        <li>LinkedIn 萬人級社群影響力</li>
-                        <li>臺大人資顧問社 特聘課程顧問</li>
+                        <li>NVIDIA｜KV cache、connector 與 scheduler</li>
+                        <li>曾任 RISC-V Vector C Intrinsic 規格工作小組主席</li>
+                        <li>TensorRT-LLM、vLLM、LLVM 等開源專案貢獻者</li>
                     </ul>
                     <div class="topic-links">
-                        <a href="https://www.linkedin.com/in/ray-rs-chang" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            LinkedIn
-                        </a>
+                        <a href="https://www.linkedin.com/in/eopxd/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="陳約廷 Yueh-Ting Chen LinkedIn" title="陳約廷 Yueh-Ting Chen LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
+                        <a href="https://github.com/eopXD" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="陳約廷 Yueh-Ting Chen GitHub" title="陳約廷 Yueh-Ting Chen GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 .3a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.23c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18a4.63 4.63 0 0 1 1.24 3.22c0 4.61-2.8 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .3Z"/></svg></a>
+                        <a href="https://eopxd.com/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="陳約廷 Yueh-Ting Chen 個人網站" title="陳約廷 Yueh-Ting Chen 個人網站"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.3 4 5.8 4 9s-1 5.7-4 9c-3-3.3-4-5.8-4-9s1-5.7 4-9Z"/></svg></a>
                     </div>
-                </div>
+                </article>
 
-                <!-- 主題三 -->
-                <div class="topic-card">
-                    <p class="topic-number">3</p>
+                <article class="topic-card" data-table="C" data-topic-number="3" aria-labelledby="topic-C-title">
+                    <p class="topic-number" aria-hidden="true">C</p>
                     <div class="topic-card-top">
-                        <img src="./assets/host-topic-3.jpg" alt="Macro Wang" class="topic-photo">
+                        <img src="./assets/host-Jeff-topic-C.jpg" alt="Jeff Hu" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <h3 class="topic-title">國際探險家</h3>
-                            <p class="topic-speaker">Macro Wang</p>
+                            <p class="topic-table-label">TABLE C</p>
+                            <h3 id="topic-C-title" class="topic-title">創業與商業開拓</h3>
+                            <p class="topic-speaker">Jeff Hu</p>
                         </div>
                     </div>
-                    <p class="topic-focus">跨國科技業的實戰生存術與海外申請策略。</p>
+                    <p class="topic-focus">從發現市場痛點、打造產品到面對募資挑戰，透過從 0 到 1 的第一線經驗，看見創業的機會、風險與現實考驗。</p>
                     <ul class="topic-exp">
-                        <li>法國里昂管理學院 碩士</li>
-                        <li>跨國（法國、新加坡、越南）科技業經歷</li>
+                        <li>Turing Space CEO</li>
+                        <li>行政院青年諮詢委員</li>
+                        <li>Forbes Asia 30 Under 30</li>
                     </ul>
                     <div class="topic-links">
-                        <a href="https://www.linkedin.com/in/marco-yi-hsuan-wang" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            LinkedIn
-                        </a>
+                        <a href="https://www.linkedin.com/in/thejeffhu/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="Jeff Hu LinkedIn" title="Jeff Hu LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
                     </div>
-                </div>
+                </article>
 
-                <!-- 主題四 -->
-                <div class="topic-card">
-                    <p class="topic-number">4</p>
+                <article class="topic-card" data-table="D" data-topic-number="4" aria-labelledby="topic-D-title">
+                    <p class="topic-number" aria-hidden="true">D</p>
                     <div class="topic-card-top">
+                        <img src="./assets/host-Samantha-topic-D.jpg" alt="Samantha Huang" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <div class="topic-title-area">
+                            <p class="topic-table-label">TABLE D</p>
+                            <h3 id="topic-D-title" class="topic-title">MarTech × AI 行銷實踐</h3>
+                            <p class="topic-speaker">Samantha Huang</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">聚焦 AI 科技產品的跨國市場定位、產品對外溝通，以及從規劃到落地的完整行銷策略。</p>
+                    <ul class="topic-exp">
+                        <li>漸強實驗室｜Senior PMM</li>
+                        <li>Appier｜PMM</li>
+                        <li>Northwestern University 整合行銷碩士</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/samantha-huang-173604157/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="Samantha Huang LinkedIn" title="Samantha Huang LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
+                    </div>
+                </article>
+
+                <article class="topic-card topic-card--pending" data-table="E" data-topic-number="5" aria-labelledby="topic-E-title">
+                    <p class="topic-number" aria-hidden="true">E</p>
+                    <div class="topic-card-top">
+                        <div class="topic-photo topic-photo-placeholder" aria-hidden="true">E</div>
+                        <div class="topic-title-area">
+                            <p class="topic-table-label">TABLE E</p>
+                            <h3 id="topic-E-title" class="topic-title">AI 伺服器產品落地</h3>
+                            <p class="topic-speaker">詠文／陳立翰</p>
+                            <span class="topic-pending">主題暫定</span>
+                        </div>
+                    </div>
+                    <p class="topic-focus">主題暫定；詳細介紹即將公布。</p>
+                </article>
+
+                <article class="topic-card" data-table="F" data-topic-number="6" aria-labelledby="topic-F-title">
+                    <p class="topic-number" aria-hidden="true">F</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-Edward-topic-F.jpg" alt="Edward Feng" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <div class="topic-title-area">
+                            <p class="topic-table-label">TABLE F</p>
+                            <h3 id="topic-F-title" class="topic-title">AI 輔助全端開發</h3>
+                            <p class="topic-speaker">Edward Feng</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">從前後端開發到測試與 DevOps，分享 AI 輔助實戰，探索如何建立信任，逐步將開發任務交給 AI。</p>
+                    <ul class="topic-exp">
+                        <li>21 年後端至 SRE 經驗；4 年全 AI 輔助開發</li>
+                        <li>Nurie AI｜AI Infra Architect</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/edward-feng-05b93584/recent-activity/all/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="Edward Feng LinkedIn" title="Edward Feng LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
+                    </div>
+                </article>
+
+                <article class="topic-card" data-table="G" data-topic-number="7" aria-labelledby="topic-G-title">
+                    <p class="topic-number" aria-hidden="true">G</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-Doppler-topic-G.jpg" alt="Doppler Kuo" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <div class="topic-title-area">
+                            <p class="topic-table-label">TABLE G</p>
+                            <h3 id="topic-G-title" class="topic-title">AI 產品技術落地</h3>
+                            <p class="topic-speaker">Doppler Kuo</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">從工程開發到 AI PM，交流團隊溝通、技術可行性判斷，以及如何把 AI 功能做成真正能上線的產品。</p>
+                    <ul class="topic-exp">
+                        <li>MetAI｜Product Manager</li>
+                        <li>USPACE｜Head of Product</li>
+                        <li>Appier 前端工程師、貝殼放大產品開發</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/dopplerkuo" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="Doppler Kuo LinkedIn" title="Doppler Kuo LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
+                    </div>
+                </article>
+
+                <article class="topic-card" data-table="H" data-topic-number="8" aria-labelledby="topic-H-title">
+                    <p class="topic-number" aria-hidden="true">H</p>
+                    <div class="topic-card-top">
+                        <img src="./assets/host-Chou-topic-H.jpg" alt="周成康" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <div class="topic-title-area">
+                            <p class="topic-table-label">TABLE H</p>
+                            <h3 id="topic-H-title" class="topic-title">語音模型在地化與應用研究</h3>
+                            <p class="topic-speaker">周成康</p>
+                        </div>
+                    </div>
+                    <p class="topic-focus">從語音模型在地化出發，探索不同場域的需求，交流 Applied Research Scientist 從研究到實際落地的工作經驗。</p>
+                    <ul class="topic-exp">
+                        <li>專注資料導向 AI、領域適應與高效模型調適</li>
+                        <li>3 篇 IEEE 論文，其中 2 篇為第一作者</li>
+                        <li>開源 ASR 模型逾 20 萬次下載；AI 系統落地工業產線</li>
+                    </ul>
+                    <div class="topic-links">
+                        <a href="https://www.linkedin.com/in/cheng-kang-chou-f2002s/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="周成康 LinkedIn" title="周成康 LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
+                    </div>
+                </article>
+
+                <article class="topic-card" data-table="I" data-topic-number="9" aria-labelledby="topic-I-title">
+                    <p class="topic-number" aria-hidden="true">I</p>
+                    <div class="topic-card-top topic-card-top--duo">
                         <div class="topic-photos-group">
-                            <img src="./assets/host-topic-4-1.jpg" alt="林奕昕" class="topic-photo">
-                            <img src="./assets/host-topic-4-2.jpg" alt="温冠華" class="topic-photo">
-                            <img src="./assets/host-topic-4-3.jpg" alt="張傑凱" class="topic-photo">
+                            <figure class="topic-person">
+                                <img src="./assets/host-Ray-Min-topic-I.jpg" alt="姚睿銘" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                                <figcaption>姚睿銘</figcaption>
+                            </figure>
+                            <figure class="topic-person">
+                                <img src="./assets/host-Z-Ann-topic-I.jpg" alt="梁安哲" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                                <figcaption>梁安哲</figcaption>
+                            </figure>
                         </div>
                         <div class="topic-title-area">
-                            <h3 class="topic-title">技術領航者</h3>
-                            <p class="topic-speaker">林奕昕、温冠華、張傑凱</p>
+                            <p class="topic-table-label">TABLE I</p>
+                            <h3 id="topic-I-title" class="topic-title">AI 實習經驗與學術研究</h3>
+                            <p class="topic-speaker">姚睿銘／梁安哲</p>
                         </div>
                     </div>
-                    <p class="topic-focus">NTUAI 幹部分享從學術研究到實戰落地的心法與技巧。</p>
+                    <p class="topic-focus">從 UBC、中研院的研究日常，到英國 AI 新創與 AMD 的實習經驗，探索國內外學術研究與企業工作的不同發展路徑。</p>
                     <ul class="topic-exp">
-                        <li><strong>林奕昕</strong>｜Appier Campaign Management Intern、Delta Electronics DSO PM
-                            Intern、MarTech Engineer</li>
-                        <li><strong>温冠華</strong>｜Taiwan Mobile SWE Intern、NTUST NLP Lab、Apache Airflow & Mahout
-                            Contributor、SITCON 2025/2026 Speaker、Google DevFest Taipei 2024 AI Speaker</li>
-                        <li><strong>張傑凱</strong>｜Apache Mahout Committer、Ray & KubeRay Core Contributor、ALC Taipei &
-                            OpenSource Events Speaker</li>
+                        <li>姚睿銘｜UBC TeaLab、中研院研究實習經驗</li>
+                        <li>姚睿銘｜臺大資工所碩士生、NTUAI 顧問暨前技術長</li>
+                        <li>梁安哲｜AMD、Quid 機器學習工程實習；TASA 嵌入式系統實習</li>
                     </ul>
-                    <div class="topic-links">
-                        <a href="https://bigjimmy127.github.io/Jimmy-s-Portfolio/" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-                            </svg>
-                            奕昕
-                        </a>
-                        <a href="https://www.linkedin.com/in/guan-hua-wen-625bb0270/" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            冠華
-                        </a>
-                        <a href="https://www.linkedin.com/in/jiekaichang" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            傑凱
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 主題五 -->
-                <div class="topic-card">
-                    <p class="topic-number">5</p>
-                    <div class="topic-card-top">
-                        <img src="./assets/host-topic-5.jpg" alt="Cheng Che Kuo" class="topic-photo">
-                        <div class="topic-title-area">
-                            <h3 class="topic-title">AI 技術實踐者</h3>
-                            <p class="topic-speaker">Cheng Che Kuo</p>
+                    <div class="topic-links topic-links--people">
+                        <div class="topic-link-group" role="group" aria-label="姚睿銘的個人連結">
+                            <span class="topic-link-name">姚睿銘</span>
+                            <div class="topic-link-icons">
+                                <a href="https://www.linkedin.com/in/rayminyao/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="姚睿銘 LinkedIn" title="姚睿銘 LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
+                                <a href="https://scholar.google.com/citations?user=uhg_vM8AAAAJ&amp;hl=zh-TW" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="姚睿銘 Scholar" title="姚睿銘 Scholar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m2 9 10-6 10 6-10 6L2 9Z"/><path d="M6 11.4v6.1c3.5 2 8.5 2 12 0v-6.1M22 9v7"/><circle cx="22" cy="18" r="1" fill="currentColor" stroke="none"/></svg></a>
+                            </div>
+                        </div>
+                        <div class="topic-link-group" role="group" aria-label="梁安哲的個人連結">
+                            <span class="topic-link-name">梁安哲</span>
+                            <div class="topic-link-icons">
+                                <a href="https://www.linkedin.com/in/namwoam/" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="梁安哲 LinkedIn" title="梁安哲 LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
+                            </div>
                         </div>
                     </div>
-                    <p class="topic-focus">AI 如何真正被應用在工程、產品到團隊與開發流程中。</p>
-                    <ul class="topic-exp">
-                        <li>MetAI Product Manager</li>
-                        <li>USPACE Head of Product</li>
-                        <li>Appier Frontend Engineer</li>
-                        <li>貝殼放大 Product Developer</li>
-                    </ul>
-                    <div class="topic-links">
-                        <a href="https://www.linkedin.com/in/dopplerkuo" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            LinkedIn
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 主題六 -->
-                <div class="topic-card">
-                    <p class="topic-number">6</p>
-                    <div class="topic-card-top">
-                        <img src="./assets/host-topic-6.jpg" alt="楊淳佑" class="topic-photo">
-                        <div class="topic-title-area">
-                            <h3 class="topic-title">AI 產品實踐</h3>
-                            <p class="topic-speaker">楊淳佑</p>
-                        </div>
-                    </div>
-                    <p class="topic-focus">從概念到落地：如何用 AI 解決真實痛點並對齊商業價值。</p>
-                    <ul class="topic-exp">
-                        <li>Tera Thinker Founder & CEO</li>
-                        <li>連續創業家，橫跨文創、媒體、區塊鏈、硬體 IC、AI 垂直領域軟體</li>
-                        <li>帶領 Tera Thinker 入選 HolonIQ 東亞教育科技前 150 大公司，服務全國超過 40% 高中學校</li>
-                    </ul>
-                    <div class="topic-links">
-                        <a href="https://www.linkedin.com/in/chunyou-yang" target="_blank" rel="noopener"
-                            class="topic-link">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                            </svg>
-                            LinkedIn
-                        </a>
-                    </div>
-                </div>
-
+                </article>
             </div>
         </div>
     </section>

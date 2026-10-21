@@ -1,12 +1,20 @@
 // ─── Theme data ───────────────────────────────────────────────────────────
 const themes = [
-    { id: 'founder', title: '創新創業家', desc: 'Jeff Hu（Turing Space CEO、Forbes Asia 30 Under 30）。分享從0到1的創業血淚、募資挑戰與解決痛點的思維，啟發具創業夢的學生。' },
-    { id: 'switcher', title: 'AI 人才轉型實戰', desc: 'Ray Chang（IBM / 緯創人資數位轉型、LinkedIn 萬人級社群影響力）。非技術背景如何結合商業洞察，極大化個人品牌競爭力。' },
-    { id: 'global', title: '國際探險家', desc: 'Macro Wang（法國里昂管理學院碩士、法/新/越南跨國科技業）。跨國科技業實戰生存術與海外申請策略。' },
-    { id: 'tech', title: '技術領航者', desc: 'AI 社內幹部（林奕昕、温冠華、張傑凱）。分享從學術研究到實戰落地的心法與技巧。' },
-    { id: 'practitioner', title: 'AI 技術實踐者', desc: 'Cheng Che Kuo（MetAI PM、USPACE Head of Product、Appier Frontend Engineer）。AI 如何真正被應用在工程、產品到開發流程中。' },
-    { id: 'pm', title: 'AI 產品實踐', desc: '楊淳佑（Tera Thinker Founder & CEO）。從概念到落地：如何用 AI 解決真實痛點並對齊商業價值。' }
+    { id: 'table-a', table: 'A', title: 'AI 資訊顧問', desc: '潘劭儒 Grace Pan（全球財務轉型、Agentic AI 與 no-code 實務）。從企業痛點與 AI 工具應用，探索非工程背景的顧問職涯。' },
+    { id: 'table-b', table: 'B', title: 'AI 推論與基礎架構', desc: '陳約廷 Yueh-Ting Chen（NVIDIA；TensorRT-LLM、vLLM、LLVM 貢獻者）。交流 AI 推論、基礎架構、Agent 工作流與開源協作。' },
+    { id: 'table-c', table: 'C', title: '創業與商業開拓', desc: 'Jeff Hu（Turing Space CEO、Forbes Asia 30 Under 30）。從市場痛點、產品打造到募資，分享從 0 到 1 的創業實戰。' },
+    { id: 'table-d', table: 'D', title: 'MarTech × AI 行銷實踐', desc: 'Samantha Huang（漸強實驗室 Senior PMM、Appier PMM）。交流 AI 科技產品的跨國市場定位、產品溝通與行銷落地。' },
+    { id: 'table-e', table: 'E', title: 'AI 伺服器產品落地', desc: '詠文／陳立翰。主題暫定；講師背景與詳細介紹待補，即將公布。' },
+    { id: 'table-f', table: 'F', title: 'AI 輔助全端開發', desc: 'Edward Feng（21 年後端至 SRE 經驗；Nurie AI AI Infra Architect）。分享 AI 輔助開發、測試與 DevOps，以及逐步建立信任的實戰。' },
+    { id: 'table-g', table: 'G', title: 'AI 產品技術落地', desc: 'Doppler Kuo（MetAI Product Manager、USPACE Head of Product）。從工程到 AI PM，交流團隊溝通、技術可行性與產品上線。' },
+    { id: 'table-h', table: 'H', title: '語音模型在地化與應用研究', desc: '周成康（資料導向 AI、領域適應與高效模型調適；開源 ASR 模型逾 20 萬次下載）。交流語音模型在地化與應用研究落地。' },
+    { id: 'table-i', table: 'I', title: 'AI 實習經驗與學術研究', desc: '姚睿銘／梁安哲（UBC、中研院研究；AMD、Quid 機器學習工程實習）。比較國內外研究與企業工作的發展路徑。' }
 ];
+
+function isValidThemeOrder(order) {
+    return Array.isArray(order) && order.length === themes.length
+        && [...order].sort((a, b) => a - b).every((value, index) => value === index + 1);
+}
 
 let currentStep = 1;
 let sortedThemesResult = [];
@@ -206,7 +214,7 @@ async function generateSmartRecommendations() {
 
     document.getElementById('recomLoading').style.display = 'none';
 
-    if (order && order.length === 6) {
+    if (isValidThemeOrder(order)) {
         sortedThemesResult = order.map(n => themes[n - 1]);
         initialAiOrder = order.join(',');
         initialAiReasons = reason;
@@ -216,7 +224,7 @@ async function generateSmartRecommendations() {
         recomEl.classList.add('recom-reveal');
     } else {
         sortedThemesResult = [...themes];
-        initialAiOrder = '1,2,3,4,5,6';
+        initialAiOrder = themes.map((_, index) => index + 1).join(',');
         initialAiReasons = '推薦服務無回應，使用預設排序';
         const errorEl = document.getElementById('recomError');
         errorEl.classList.remove('hidden');
@@ -244,7 +252,7 @@ function renderRankingList() {
                 <path d="M8 9h8M8 12h8M8 15h8" stroke-linecap="round"/>
             </svg>
             <div class="rank-item-content">
-                <span class="rank-item-title">${theme.title}</span>
+                <span class="rank-item-title">${theme.table} 桌｜${theme.title}</span>
                 <span class="rank-item-desc">${theme.desc}</span>
             </div>
         `;
