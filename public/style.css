@@ -370,7 +370,7 @@ body {
 #about .bg {
     position: absolute;
     inset: 0;
-    background-image: url('./assets/AIcohol_intro_bg.jpg');
+    background-image: url('./assets/AIcohol_intro.jpg');
     background-size: cover;
     background-position: center top;
     filter: brightness(0.7);
@@ -1894,6 +1894,10 @@ select.field-input option {
 
 .topic-card[data-table="H"] .topic-photo {
     object-position: 50% 40%;
+}
+
+.topic-card[data-table="E"] .topic-photo {
+    object-position: 50% 30%;
 }
 
 .topic-photo-placeholder {

@@ -26,16 +26,16 @@ export default async function handler(req, res) {
     }
 
     const tables = [
-        { table: 'A', title: 'AI 資訊顧問', description: '講者潘劭儒 Grace Pan。全球財務轉型專案經驗，專精 Agentic AI、自動化與 no-code；The AI Collective 台北 Chapter Lead、Lovable 台北 City Lead 與 Solo Expert Partner。從企業痛點診斷到 AI 工具應用，探索非工程背景的 AI 顧問職涯與跨國專案。' },
-        { table: 'B', title: 'AI 推論與基礎架構', description: '講者陳約廷 Yueh-Ting Chen。NVIDIA 的 KV cache、connector 與 scheduler；曾任 RISC-V Vector C Intrinsic 規格工作小組主席，貢獻 TensorRT-LLM、vLLM、LLVM 等開源專案。交流 AI 推論與基礎架構、Agent 工作流和開源協作。' },
-        { table: 'C', title: '創業與商業開拓', description: '講者 Jeff Hu。Turing Space CEO、行政院青年諮詢委員、Forbes Asia 30 Under 30。從市場痛點、打造產品到募資挑戰，分享從 0 到 1 的創業機會、風險與現實考驗。' },
-        { table: 'D', title: 'MarTech × AI 行銷實踐', description: '講者 Samantha Huang。漸強實驗室 Senior PMM、Appier PMM、Northwestern University 整合行銷碩士。交流 AI 科技產品的跨國市場定位、產品對外溝通，以及從規劃到落地的行銷策略。' },
-        { table: 'E', title: 'AI 伺服器產品落地', description: '講者詠文／陳立翰。主題暫定；講師背景與詳細介紹待補，目前沒有其他已提供的經歷或主題細節。' },
-        { table: 'F', title: 'AI 輔助全端開發', description: '講者 Edward Feng。21 年後端至 SRE 經驗、4 年全 AI 輔助開發，Nurie AI AI Infra Architect。從前後端到測試與 DevOps，分享 AI 輔助實戰與建立信任、逐步交付開發任務的方法。' },
-        { table: 'G', title: 'AI 產品技術決策', description: '講者 Doppler Kuo。MetAI Product Manager、USPACE Head of Product、Appier 前端工程師、貝殼放大產品開發。從工程到 AI PM，交流團隊溝通、技術可行性判斷與 AI 產品上線。' },
-        { table: 'H', title: '語音模型在地化與應用研究', description: '講者周成康。專注資料導向 AI、領域適應與高效模型調適；3 篇 IEEE 論文中 2 篇第一作者，開源 ASR 模型逾 20 萬次下載，AI 系統落地工業產線。交流語音模型在地化、場域需求及 Applied Research Scientist 的落地工作。' },
-        { table: 'I', title: 'AI 研究、社團幹部與學術觀察', description: '講者姚睿銘／梁安哲。姚睿銘有 UBC TeaLab、中研院研究實習經驗，為臺大資工所碩士生、NTUAI 顧問暨前技術長；梁安哲有 AMD、Quid 機器學習工程與 TASA 嵌入式系統實習經驗。比較國內外學術研究與企業工作的發展路徑。' },
-        { table: 'J', title: '邊緣 AI 硬體 PM', description: '講者待定。主題暫定；講師背景與詳細介紹待補，目前沒有其他已提供的經歷或主題細節。' },
+        { table: 'A', title: 'AI 資訊顧問', description: '(AI Consultant)：講者潘劭儒 Grace Pan（轉型顧問，目前負責全球財務轉型專案，專精 Agentic AI、自動化與 no-code 工具應用；The AI Collective 台北分會 Chapter Lead、Lovable 台北 City Lead 暨 Solo Expert Partner）。從企業痛點診斷到 AI 工具應用，探索非工程背景如何切入 AI 顧問工作，在跨國專案與持續學習中累積職涯競爭力，適合非工程背景、想作為顧問，或想學習 AI 自動化與 no-code 工具應用的同學。' },
+        { table: 'B', title: 'AI 推論與基礎架構', description: '(AI Infra)：講者陳約廷 Yueh-Ting Chen（NVIDIA，負責 KV cache、connector、scheduler 相關問題；曾任 RISC-V Vector C Intrinsic specification task group 主席、LLVM 該規格主要實作者之一；對 TensorRT-LLM、vLLM、LLVM、QEMU、Spike 開源專案有實質貢獻）。深入 AI 推論技術，探索 Agent 工作流如何融入日常工作，並分享開源專案的實戰與協作經驗，適合資工、電機背景，想走系統底層、推論優化或參與開源專案的同學。' },
+        { table: 'C', title: '創業與商業開拓', description: '(Founder)：講者 Jeff Hu（Turing Space CEO、行政院青年諮詢委員、Forbes Asia 30 Under 30）。分享從 0 到 1 的創業之路，從發現市場痛點、打造產品到面對募資挑戰，透過第一線經驗看見創業的機會、風險與現實考驗，適合想了解創業與募資、商業真實樣貌的同學。' },
+        { table: 'D', title: 'MarTech × AI 行銷實踐', description: '(AI Marketing)：講者 Samantha Huang（漸強實驗室 Senior PMM、Appier PMM、Northwestern University 整合行銷碩士）。專注 AI 科技產品的跨國市場定位、產品對外論述，以及 End-to-End 行銷策略規劃與落地，適合對行銷、品牌、產品行銷（PMM）或 MarTech 有興趣，想了解 AI 產品如何走向市場的同學。' },
+        { table: 'E', title: 'AI 伺服器產品落地', description: '(AI Server NPI)：講者鄭詠文（廣達 PM，具備伺服器 NPI 物料管理經驗，熟悉 ERP 系統、供應商管理及 AI 輔助缺料分析）、陳立翰（鴻海精密工業 Project Engineer，負責 AI 伺服器專案規劃、執行與問題解決）。串聯客戶、研發與製造端，協助新產品導入到量產準備，適合對硬體製造、專案管理或 AI 伺服器產業有興趣的同學。' },
+        { table: 'F', title: 'AI 輔助全端開發', description: '(AI-Assisted Development)：講者 Edward Feng（21 年後端到 SRE 經驗、4 年全 AI 輔助開發經驗，現任 Nurie AI 的 AI Infra Architect）。從前後端開發到測試與 DevOps，分享 AI 輔助的實戰經驗，探索如何建立信任，逐步將任務放心地交給 AI，適合軟程背景、想提升開發效率、新創並了解 AI 輔助寫程式的同學。' },
+        { table: 'G', title: 'AI 產品技術決策', description: '(AI Product Manager)：講者 Doppler Kuo（MetAI Product Manager、USPACE Head of Product、Appier Frontend Engineer、貝殼放大 Product Developer）。從寫 Code 到 AI PM，分享工程團隊溝通、技術可行性判斷，以及如何把 AI 功能做成真正能上線的產品，適合想從工程轉 PM、或想了解 AI 產品開發與跨團隊溝通的同學。' },
+        { table: 'H', title: '語音模型在地化與應用研究', description: '(Applied Researcher)：講者周成康（Applied ML researcher，專注 data-centric AI、domain adaptation 與 efficient model adaptation；3 篇 IEEE 論文（2 篇第一作者）、開源 ASR 模型下載量 20 萬以上、AI 系統部署於工業產線）。從語音模型在地化出發，探索如何讓模型適應不同場域與情境需求，分享 Applied Research Scientist 從研究到實際落地的工作經驗，適合對語音模型、機器學習研究、深入探索學術領域的同學。' },
+        { table: 'I', title: 'AI 研究、社團幹部與學術觀察', description: '(Research & Academia)：講者姚睿銘（英屬哥倫比亞大學 TeaLab Research Intern、前中研院 Research Intern、NTU AI Club Advisor 暨前 Technical Lead、臺大資工所 TriLab 碩士生）、梁安哲（AMD Machine Learning Engineer Intern、Quid Machine Learning Engineer Intern、TASA Embedded Systems Intern）。姚睿銘分享 AI 研究工作的日常與海內外學術經歷，探索不同研究環境與發展路徑；梁安哲分享從英國 AI 新創到 AMD 的實習工作與學習收穫，探索不同企業環境中的職涯方向，適合考慮出國或國內升學、想了解 AI 研究生活，或想爭取海內外 AI 實習的同學。' },
+        { table: 'J', title: '邊緣 AI 硬體 PM', description: '(Edge AI Hardware PM)：講者 Yangju（華碩 ASUS AI 策略事業與品牌管理部門主管、博世 Bosch Taiwan 專案經理、華碩 ASUS ProArt 產品系列企劃 PM）。專注 AI 與硬體科技產品的市場定位、Go-to-Market 策略與全球產品上市，將市場洞察轉化為產品藍圖與商業落地，適合對硬體產品經理、產品規劃或科技業 AI 策略有興趣的同學。' },
     ];
     const tableCount = tables.length;
     const exampleOrder = tables.map((_, index) => index + 1);
@@ -52,7 +52,7 @@ export default async function handler(req, res) {
 
 ## 桌次說明
 ${tableDescriptions}
-E 桌主題暫定，講師背景與詳細介紹待補。不得臆測未提供的 E 桌講師經歷；資料不足時，不得憑空撰寫背景適配理由，只能依已提供的暫定主題說明探索方向與資訊限制。
+請僅依上述已提供的講師背景與主題內容推薦，不得編造講師經歷或未提供的資訊。
 
 ## 輸出格式（嚴格遵守）
 只輸出一個合法的 JSON 物件，不要有任何其他文字、markdown、代碼區塊：
