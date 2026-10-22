@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         { table: 'D', title: 'MarTech × AI 行銷實踐', description: '講者 Samantha Huang。漸強實驗室 Senior PMM、Appier PMM、Northwestern University 整合行銷碩士。交流 AI 科技產品的跨國市場定位、產品對外溝通，以及從規劃到落地的行銷策略。' },
         { table: 'E', title: 'AI 伺服器產品落地', description: '講者詠文／陳立翰。主題暫定；講師背景與詳細介紹待補，目前沒有其他已提供的經歷或主題細節。' },
         { table: 'F', title: 'AI 輔助全端開發', description: '講者 Edward Feng。21 年後端至 SRE 經驗、4 年全 AI 輔助開發，Nurie AI AI Infra Architect。從前後端到測試與 DevOps，分享 AI 輔助實戰與建立信任、逐步交付開發任務的方法。' },
-        { table: 'G', title: 'AI 產品技術落地', description: '講者 Doppler Kuo。MetAI Product Manager、USPACE Head of Product、Appier 前端工程師、貝殼放大產品開發。從工程到 AI PM，交流團隊溝通、技術可行性判斷與 AI 產品上線。' },
+        { table: 'G', title: 'AI 產品技術決策', description: '講者 Doppler Kuo。MetAI Product Manager、USPACE Head of Product、Appier 前端工程師、貝殼放大產品開發。從工程到 AI PM，交流團隊溝通、技術可行性判斷與 AI 產品上線。' },
         { table: 'H', title: '語音模型在地化與應用研究', description: '講者周成康。專注資料導向 AI、領域適應與高效模型調適；3 篇 IEEE 論文中 2 篇第一作者，開源 ASR 模型逾 20 萬次下載，AI 系統落地工業產線。交流語音模型在地化、場域需求及 Applied Research Scientist 的落地工作。' },
         { table: 'I', title: 'AI 研究、社團幹部與學術觀察', description: '講者姚睿銘／梁安哲。姚睿銘有 UBC TeaLab、中研院研究實習經驗，為臺大資工所碩士生、NTUAI 顧問暨前技術長；梁安哲有 AMD、Quid 機器學習工程與 TASA 嵌入式系統實習經驗。比較國內外學術研究與企業工作的發展路徑。' },
         { table: 'J', title: '邊緣 AI 硬體 PM', description: '講者待定。主題暫定；講師背景與詳細介紹待補，目前沒有其他已提供的經歷或主題細節。' },

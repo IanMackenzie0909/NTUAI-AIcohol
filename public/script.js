@@ -6,9 +6,10 @@ const themes = [
     { id: 'table-d', table: 'D', title: 'MarTech × AI 行銷實踐', desc: 'Samantha Huang（漸強實驗室 Senior PMM、Appier PMM）。交流 AI 科技產品的跨國市場定位、產品溝通與行銷落地。' },
     { id: 'table-e', table: 'E', title: 'AI 伺服器產品落地', desc: '詠文／陳立翰。主題暫定；講師背景與詳細介紹待補，即將公布。' },
     { id: 'table-f', table: 'F', title: 'AI 輔助全端開發', desc: 'Edward Feng（21 年後端至 SRE 經驗；Nurie AI AI Infra Architect）。分享 AI 輔助開發、測試與 DevOps，以及逐步建立信任的實戰。' },
-    { id: 'table-g', table: 'G', title: 'AI 產品技術落地', desc: 'Doppler Kuo（MetAI Product Manager、USPACE Head of Product）。從工程到 AI PM，交流團隊溝通、技術可行性與產品上線。' },
+    { id: 'table-g', table: 'G', title: 'AI 產品技術決策', desc: 'Doppler Kuo（MetAI Product Manager、USPACE Head of Product）。從工程到 AI PM，交流團隊溝通、技術可行性與產品上線。' },
     { id: 'table-h', table: 'H', title: '語音模型在地化與應用研究', desc: '周成康（資料導向 AI、領域適應與高效模型調適；開源 ASR 模型逾 20 萬次下載）。交流語音模型在地化與應用研究落地。' },
-    { id: 'table-i', table: 'I', title: 'AI 實習經驗與學術研究', desc: '姚睿銘／梁安哲（UBC、中研院研究；AMD、Quid 機器學習工程實習）。比較國內外研究與企業工作的發展路徑。' }
+    { id: 'table-i', table: 'I', title: 'AI 研究、社團幹部與學術觀察', desc: '姚睿銘／梁安哲（UBC、中研院研究；AMD、Quid 機器學習工程實習）。比較國內外研究與企業工作的發展路徑。' },
+    { id: 'table-j', table: 'J', title: '邊緣 AI 硬體 PM', desc: '講者待定。主題暫定；講師背景與詳細介紹待補，即將公布。' }
 ];
 
 function isValidThemeOrder(order) {
@@ -205,6 +206,12 @@ async function generateSmartRecommendations() {
             const data = await res.json();
             order = data.order;
             reason = data.reason;
+            if (!isValidThemeOrder(order)) {
+                console.warn('Recommend API returned invalid table order', {
+                    expectedTables: themes.length,
+                    receivedTables: Array.isArray(order) ? order.length : null,
+                });
+            }
         } else {
             console.warn('Recommend API error', await res.text());
         }
