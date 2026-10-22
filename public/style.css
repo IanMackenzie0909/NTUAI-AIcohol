@@ -488,6 +488,7 @@ body {
     border-radius: 2.5rem;
     padding: 48px 40px;
     width: 100%;
+    min-width: 0;
     max-width: 1000px;
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
 }
@@ -684,6 +685,8 @@ body {
 
 .field-input {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
     padding: 14px 18px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.12);
@@ -860,6 +863,7 @@ select.field-input {
     line-height: 1.8;
     margin: 0 0 12px;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .recom-error {
@@ -969,30 +973,33 @@ select.field-input {
     font-weight: 700;
     font-size: 0.88rem;
     display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .rank-item-desc {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.75rem;
     display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: wrap;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 /* Step 3 two-col layout */
 .step3-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    /* Let content wrap within each track instead of setting its minimum width. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 28px;
+}
+
+.step3-grid > * {
+    min-width: 0;
 }
 
 @media (max-width: 980px) {
     .step3-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
