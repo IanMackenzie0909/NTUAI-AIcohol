@@ -5,14 +5,21 @@ import handler from '../api/register.js';
 const originalFetch = globalThis.fetch;
 const originalError = console.error;
 const originalWarn = console.warn;
+const originalSetTimeout = globalThis.setTimeout;
 const originalGasUrl = process.env.GAS_SCRIPT_URL;
 const originalApiKey = process.env.API_KEY;
 let errors;
+let waits;
 
 beforeEach(() => {
     process.env.GAS_SCRIPT_URL = 'https://example.test/exec';
     process.env.API_KEY = 'unit-test-shared-secret';
     errors = [];
+    waits = [];
+    globalThis.setTimeout = (callback, milliseconds) => {
+        waits.push(milliseconds);
+        queueMicrotask(callback);
+    };
     console.error = (...args) => errors.push(args);
     console.warn = () => {};
 });
@@ -21,6 +28,7 @@ afterEach(() => {
     globalThis.fetch = originalFetch;
     console.error = originalError;
     console.warn = originalWarn;
+    globalThis.setTimeout = originalSetTimeout;
     if (originalGasUrl === undefined) delete process.env.GAS_SCRIPT_URL;
     else process.env.GAS_SCRIPT_URL = originalGasUrl;
     if (originalApiKey === undefined) delete process.env.API_KEY;
@@ -83,7 +91,8 @@ test('rejects an application error even when GAS responds with HTTP 200', async 
     const res = await submit();
     assert.equal(res.statusCode, 502);
     assert.equal(res.body.ok, undefined);
-    assert.match(errors[0][1].message, /API KEY 錯誤/);
+    assert.equal(errors[0][1].reason, 'gas_rejected');
+    assert.equal(res.body.submissionStatus, 'unknown');
 });
 
 test('rejects HTML or an unexpected JSON response instead of reporting success', async () => {
@@ -106,6 +115,135 @@ test('keeps a saved registration successful when only the confirmation email fai
 test('does not disclose the shared secret in upstream error logs or the client response', async () => {
     globalThis.fetch = async () => Response.json({ status: 'error', message: 'Rejected unit-test-shared-secret' });
     const res = await submit();
-    assert.ok(!errors[0][1].message.includes('unit-test-shared-secret'));
+    assert.ok(!JSON.stringify(errors).includes('unit-test-shared-secret'));
     assert.ok(!JSON.stringify(res.body).includes('unit-test-shared-secret'));
+});
+
+const resultUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=result-token&lib=test-lib';
+
+test('retrieves the ContentService response with a body-free GET after one POST', async () => {
+    const requests = [];
+    globalThis.fetch = async (url, options) => {
+        requests.push({ url, options });
+        return requests.length === 1
+            ? new Response(null, { status: 302, headers: { location: resultUrl } })
+            : Response.json({ status: 'success' });
+    };
+    assert.equal((await submit()).statusCode, 200);
+    assert.equal(requests.length, 2);
+    assert.equal(requests[0].options.method, 'POST');
+    assert.equal(requests[0].options.redirect, 'manual');
+    assert.equal(requests[1].url, resultUrl);
+    assert.equal(requests[1].options.method, 'GET');
+    assert.equal(requests[1].options.redirect, 'manual');
+    assert.equal(requests[1].options.body, undefined);
+    assert.equal(requests[1].options.headers, undefined);
+    assert.deepEqual(waits, []);
+});
+
+test('recovers from temporary result 404s without repeating the registration POST', async () => {
+    const requests = [];
+    globalThis.fetch = async (url, options) => {
+        requests.push({ url, method: options.method });
+        if (requests.length === 1) return new Response(null, { status: 303, headers: { location: resultUrl } });
+        if (requests.length <= 3) return new Response('Not ready', { status: 404 });
+        return Response.json({ status: 'success' });
+    };
+    const res = await submit();
+    assert.deepEqual(res.body, { ok: true });
+    assert.deepEqual(requests.map(request => request.method), ['POST', 'GET', 'GET', 'GET']);
+    assert.ok(requests.slice(1).every(request => request.url === resultUrl));
+    assert.deepEqual(waits, [1000, 2000]);
+});
+
+test('bounds result 404 retries and reports an unknown outcome without exposing the token', async () => {
+    const requests = [];
+    const failedBodies = [];
+    globalThis.fetch = async (url, options) => {
+        requests.push({ url, method: options.method });
+        if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+        const response = new Response('Missing', { status: 404 });
+        failedBodies.push(response);
+        return response;
+    };
+    const res = await submit();
+    assert.equal(res.statusCode, 502);
+    assert.equal(res.body.code, 'REGISTRATION_UNCONFIRMED');
+    assert.equal(res.body.submissionStatus, 'unknown');
+    assert.deepEqual(requests.map(request => request.method), ['POST', 'GET', 'GET', 'GET', 'GET']);
+    assert.deepEqual(waits, [1000, 2000, 3000]);
+    assert.ok(failedBodies.every(response => response.bodyUsed));
+    assert.equal(errors[0][1].stage, 'result');
+    assert.equal(errors[0][1].status, 404);
+    assert.equal(errors[0][1].responseAttempts, 4);
+    assert.ok(!JSON.stringify({ errors, response: res.body }).includes('result-token'));
+});
+
+test('does not retry an initial POST 404, a failed POST, or a non-404 result error', async () => {
+    for (const scenario of ['post-404', 'post-timeout', 'result-403']) {
+        const methods = [];
+        globalThis.fetch = async (_url, options) => {
+            methods.push(options.method);
+            if (scenario === 'post-timeout') throw new DOMException('Timeout with a secret URL', 'TimeoutError');
+            if (scenario === 'post-404') return new Response('Missing', { status: 404 });
+            return methods.length === 1
+                ? new Response(null, { status: 302, headers: { location: resultUrl } })
+                : new Response('Forbidden', { status: 403 });
+        };
+        const res = await submit();
+        assert.equal(res.statusCode, 502);
+        assert.equal(res.body.submissionStatus, 'unknown');
+        assert.deepEqual(methods, scenario === 'result-403' ? ['POST', 'GET'] : ['POST']);
+        assert.deepEqual(waits, []);
+    }
+});
+
+test('does not follow login, untrusted, or write-capable redirect destinations', async () => {
+    for (const location of [null, 'not a URL', 'http://script.googleusercontent.com/macros/echo',
+        'https://script.googleusercontent.com.evil.test/macros/echo',
+        'https://accounts.google.com/login', 'https://script.google.com/macros/s/deployment/exec',
+        'https://user:password@script.googleusercontent.com/macros/echo',
+        'https://script.googleusercontent.com:444/macros/echo',
+        'https://script.googleusercontent.com/macros/s/deployment/exec']) {
+        let calls = 0;
+        globalThis.fetch = async () => {
+            calls++;
+            assert.equal(calls, 1);
+            return new Response(null, { status: 302, headers: location ? { location } : {} });
+        };
+        assert.equal((await submit()).statusCode, 502);
+        assert.equal(calls, 1);
+    }
+});
+
+test('never replays a POST for 307/308 or follows another result redirect', async () => {
+    for (const status of [307, 308]) {
+        let calls = 0;
+        globalThis.fetch = async () => {
+            calls++;
+            return new Response(null, { status, headers: { location: resultUrl } });
+        };
+        assert.equal((await submit()).statusCode, 502);
+        assert.equal(calls, 1);
+    }
+    let calls = 0;
+    globalThis.fetch = async () => {
+        calls++;
+        return new Response(null, { status: 302, headers: { location: calls === 1 ? resultUrl : 'https://evil.test' } });
+    };
+    assert.equal((await submit()).statusCode, 502);
+    assert.equal(calls, 2);
+});
+
+test('does not accept a result redirect as success without a confirmed JSON status', async () => {
+    for (const result of ['<html>Missing</html>', JSON.stringify({ status: 'error' }), JSON.stringify({ ok: true })]) {
+        let calls = 0;
+        globalThis.fetch = async () => ++calls === 1
+            ? new Response(null, { status: 302, headers: { location: resultUrl } })
+            : new Response(result, { status: 200 });
+        const res = await submit();
+        assert.equal(res.statusCode, 502);
+        assert.equal(res.body.submissionStatus, 'unknown');
+        assert.equal(calls, 2);
+    }
 });

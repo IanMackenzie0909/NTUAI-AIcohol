@@ -17,6 +17,7 @@ function isValidThemeOrder(order) {
         && [...order].sort((a, b) => a - b).every((value, index) => value === index + 1);
 }
 
+let submissionState = 'idle';
 let currentStep = 1;
 let sortedThemesResult = [];
 let rankingSortable = null;
@@ -171,6 +172,8 @@ function nextStep(step) {
 
 // ─── AI recommendations (Gemini) ─────────────────────────────────────────
 async function generateSmartRecommendations() {
+    if (submissionState !== 'idle') return;
+
     const motivation = document.getElementById('motivation').value;
     const status = userStatus.value;
     const tags = [
@@ -239,7 +242,7 @@ async function generateSmartRecommendations() {
     }
 
     if (nextBtn) nextBtn.disabled = false;
-    if (submitBtn) submitBtn.disabled = false;
+    if (submitBtn) submitBtn.disabled = submissionState !== 'idle';
 
     renderRankingList();
 }
@@ -286,14 +289,20 @@ function renderRankingList() {
 // ─── Form submit ──────────────────────────────────────────────────────────
 document.getElementById('registrationForm').addEventListener('submit', async function (e) {
     e.preventDefault();
+    // A lost response can follow a successful write; do not submit it again.
+    if (submissionState !== 'idle') return;
+
     const confirmCheckbox = document.getElementById('confirmCheckbox');
     if (!confirmCheckbox.checked) {
         confirmCheckbox.focus();
         return;
     }
     const submitBtn = document.getElementById('submitBtn');
+    const msg = document.getElementById('resultMessage');
+    submissionState = 'sending';
     submitBtn.disabled = true;
     submitBtn.innerText = '發送中...';
+    msg.classList.add('hidden');
 
     const status = document.getElementById('userStatus').value;
     const details = getStatusDetails();
@@ -318,6 +327,8 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         table_questions: document.getElementById('tableQuestions').value.trim(),
     };
 
+    let retryableFailure = false;
+    let failureMessage = '';
     try {
         const res = await fetch('/api/register', {
             method: 'POST',
@@ -325,18 +336,36 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             body: JSON.stringify(payload),
         });
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        let data = null;
+        try {
+            data = await res.json();
+        } catch {
+            // HTML, an empty response or invalid JSON cannot confirm a write.
+        }
 
+        if (!res.ok || data?.ok !== true) {
+            retryableFailure = (res.status === 400 && typeof data?.error === 'string')
+                || (res.status === 500 && data?.error === 'Server misconfiguration');
+            failureMessage = res.status === 500
+                ? '系統設定尚未完成，這次資料未送出。請稍後再試或聯絡主辦單位。'
+                : '這次報名未被接受，請確認填寫內容，或聯絡主辦單位後再試。';
+            throw new Error(`Registration response not confirmed (HTTP ${res.status})`);
+        }
+
+        submissionState = 'success';
         document.getElementById('step3').classList.add('hidden');
         document.getElementById('successScreen').classList.remove('hidden');
     } catch (err) {
         console.error('Submit error:', err);
-        const msg = document.getElementById('resultMessage');
-        msg.innerText = '傳送失敗，請檢查網路連線或稍後再試。';
+        submissionState = retryableFailure ? 'idle' : 'unknown';
+        msg.innerText = retryableFailure
+            ? failureMessage
+            : '目前無法確認報名結果，資料可能已送達。請先查看確認信（含垃圾郵件）；若已收到，請勿重複送出。若未收到，請透過 Email：hexlabai@gmail.com 或 IG：@ntuaiclub 聯絡主辦單位確認。';
         msg.className = 'result-message result-message-error';
+        msg.setAttribute('role', 'alert');
         msg.classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.innerText = '重試發送';
+        submitBtn.disabled = !retryableFailure;
+        submitBtn.innerText = retryableFailure ? '確認後重新送出' : '請先確認報名狀態';
     }
 });
 
