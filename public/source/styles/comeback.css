@@ -1,0 +1,85 @@
+/* Only a successfully initialized entrance hides text; its layout is retained. */
+#about .about-headline-return[data-comeback-state="armed"] {
+    opacity: 0;
+}
+
+#about .about-headline-return.comeback-playing {
+    isolation: isolate;
+    transform-origin: 50% 65%;
+    will-change: transform;
+}
+
+#about .comeback-effect {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+}
+
+#about .comeback-effect * {
+    pointer-events: none;
+}
+
+#about .comeback-halo {
+    position: absolute;
+    inset: -22% -18%;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(255, 224, 163, 0.46) 0%, rgba(255, 151, 62, 0.25) 35%, rgba(245, 99, 0, 0) 72%);
+    filter: blur(7px);
+    opacity: 0;
+}
+
+#about .comeback-sweep {
+    position: absolute;
+    top: -8%;
+    left: -28%;
+    width: 28%;
+    height: 116%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(255, 224, 163, 0.16), rgba(255, 243, 216, 0.64), transparent);
+    filter: blur(3px);
+    opacity: 0;
+}
+
+#about .comeback-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffe8c2;
+    box-shadow: 0 0 8px rgba(255, 184, 92, 0.85);
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #about .comeback-effect {
+        display: none;
+    }
+
+    #about .about-headline-return.comeback-playing {
+        transform: none !important;
+        filter: none !important;
+        text-shadow: inherit !important;
+    }
+
+    #about .about-headline-return[data-comeback-state="armed"],
+    #about .about-headline-return.comeback-playing {
+        opacity: 1 !important;
+    }
+}
+
+@media print {
+    #about .comeback-effect {
+        display: none;
+    }
+
+    #about .about-headline-return[data-comeback-state="armed"],
+    #about .about-headline-return.comeback-playing {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        text-shadow: inherit !important;
+    }
+}

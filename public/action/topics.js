@@ -80,28 +80,144 @@
 
     const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     const cardAnimations = new Map();
+    const detailAnimations = new Set();
+    const outgoingLayers = new Set();
     let heightAnimation = null;
     let selected = 'all';
     const easing = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
     const duration = 560;
 
     function finishMotionClass() {
-        if (!cardAnimations.size && !heightAnimation) explorer.classList.remove('topics-is-moving');
+        if (!cardAnimations.size && !detailAnimations.size && !heightAnimation) explorer.classList.remove('topics-is-moving');
     }
 
     function cancelMotion() {
         for (const animation of cardAnimations.values()) animation.cancel();
         cardAnimations.clear();
+        for (const animation of detailAnimations) animation.cancel();
+        detailAnimations.clear();
+        for (const layer of outgoingLayers) layer.remove();
+        outgoingLayers.clear();
         if (heightAnimation) heightAnimation.cancel();
         heightAnimation = null;
         explorer.classList.remove('topics-is-moving');
     }
 
+    function reveal(element, frames, options, onFinish) {
+        if (!element || typeof element.animate !== 'function') {
+            onFinish?.();
+            return;
+        }
+        const animation = element.animate(frames, { easing, fill: 'backwards', ...options });
+        detailAnimations.add(animation);
+        animation.onfinish = () => {
+            if (!detailAnimations.delete(animation)) return;
+            onFinish?.();
+            // Release the effect instead of retaining any final inline styles.
+            animation.cancel();
+            finishMotionClass();
+        };
+    }
+
+    function outgoingHeader() {
+        if (flavorPanel.hidden) return null;
+        const header = flavorPanel.querySelector('.topics-collection-header');
+        if (Number(getComputedStyle(header).opacity) < .05) return null;
+        const bounds = flavorPanel.getBoundingClientRect();
+        const origin = explorer.getBoundingClientRect();
+        const surface = getComputedStyle(flavorPanel);
+        const layer = document.createElement('div');
+        layer.className = 'topics-flavor-exit';
+        layer.setAttribute('aria-hidden', 'true');
+        layer.inert = true;
+        Object.assign(layer.style, {
+            left: `${bounds.left - origin.left}px`, top: `${bounds.top - origin.top}px`,
+            width: `${bounds.width}px`, height: `${bounds.height}px`,
+            padding: surface.padding, borderRadius: surface.borderRadius,
+            borderColor: surface.borderTopColor, backgroundImage: surface.backgroundImage,
+        });
+        // Only the decorative header is copied. The ten real cards never duplicate.
+        const copy = header.cloneNode(true);
+        const originals = [header, ...header.querySelectorAll('*')];
+        const copies = [copy, ...copy.querySelectorAll('*')];
+        copies.forEach((element, index) => {
+            const style = getComputedStyle(originals[index]);
+            element.style.opacity = style.opacity;
+            element.style.transform = style.transform;
+            element.removeAttribute('id');
+            element.removeAttribute('aria-labelledby');
+            element.removeAttribute('aria-describedby');
+            element.removeAttribute('aria-controls');
+        });
+        layer.appendChild(copy);
+        return layer;
+    }
+
+    function revealFlavor(chosen, before, exitLayer) {
+        if (exitLayer) {
+            outgoingLayers.add(exitLayer);
+            explorer.appendChild(exitLayer);
+            reveal(exitLayer, [
+                { opacity: 1, transform: 'translateY(0)' },
+                { opacity: 0, transform: 'translateY(-6px)' },
+            ], { duration: 180 }, () => {
+                exitLayer.remove();
+                outgoingLayers.delete(exitLayer);
+            });
+        }
+        // Color changes soften the collection surface without transforming the
+        // parent of the FLIP cards, so their measured positions stay accurate.
+        for (const card of cards) {
+            const first = before.get(card);
+            const last = getComputedStyle(card);
+            if (first.background === last.backgroundColor && first.border === last.borderTopColor) continue;
+            reveal(card, [
+                { backgroundColor: first.background, borderColor: first.border },
+                { backgroundColor: last.backgroundColor, borderColor: last.borderTopColor },
+            ], { duration: 420 });
+        }
+        if (flavorPanel.hidden) return;
+        const surface = getComputedStyle(flavorPanel);
+        reveal(flavorPanel, [
+            { backgroundColor: 'rgba(19,19,20,0)', borderColor: 'rgba(255,133,51,0)' },
+            { backgroundColor: surface.backgroundColor, borderColor: surface.borderTopColor },
+        ], { duration: 380 });
+        reveal(flavorPanel.querySelector('.topics-collection-header'), [
+            { opacity: 0, transform: 'translateY(10px)' },
+            { opacity: 1, transform: 'translateY(0)' },
+        ], { duration: 420, delay: 30 });
+        reveal(document.getElementById('topics-flavor-image'), [
+            { opacity: 0, transform: 'translateY(12px) scale(.96)' },
+            { opacity: 1, transform: 'translateY(0) scale(1)' },
+        ], { duration: 500, delay: 40 });
+        [...document.getElementById('topics-flavor-tags').children].forEach((tag, index) => {
+            reveal(tag, [
+                { opacity: 0, transform: 'translateY(5px)' },
+                { opacity: 1, transform: 'translateY(0)' },
+            ], { duration: 320, delay: 60 + index * 24 });
+        });
+        chosen.forEach((card, index) => {
+            reveal(card.querySelector('.topic-drink-pairing'), [
+                { opacity: 0, transform: 'translateY(7px)' },
+                { opacity: 1, transform: 'translateY(0)' },
+            ], { duration: 340, delay: 100 + index * 28 });
+        });
+        reveal(otherHeader, [
+            { opacity: 0, transform: 'translateY(6px)' },
+            { opacity: 1, transform: 'translateY(0)' },
+        ], { duration: 320, delay: 50 });
+    }
+
     function setFlavor(key, animate = true) {
         if (key !== 'all' && !flavors[key]) return;
+        const shouldAnimate = animate && !motionPreference.matches && typeof explorer.animate === 'function';
         const activeElement = document.activeElement;
-        const before = new Map(cards.map(card => [card, card.getBoundingClientRect()]));
+        const before = new Map(cards.map(card => {
+            const style = getComputedStyle(card);
+            return [card, { bounds: card.getBoundingClientRect(), background: style.backgroundColor, border: style.borderTopColor }];
+        }));
         const beforeHeight = explorer.getBoundingClientRect().height;
+        const exitLayer = shouldAnimate ? outgoingHeader() : null;
         // Read currently rendered positions before cancelling an interrupted FLIP.
         cancelMotion();
         selected = key;
@@ -147,13 +263,16 @@
         if (activeElement && explorer.contains(activeElement) && document.activeElement !== activeElement) {
             activeElement.focus({ preventScroll: true });
         }
-        if (!animate || motionPreference.matches || typeof explorer.animate !== 'function') return;
+        explorer.dispatchEvent(new CustomEvent('topics:change', {
+            bubbles: true, detail: { flavor: key, animate: shouldAnimate, tables: chosen.map(card => card.dataset.table) },
+        }));
+        if (!shouldAnimate) return;
 
         const afterHeight = explorer.getBoundingClientRect().height;
         explorer.classList.add('topics-is-moving');
         for (const card of cards) {
             if (typeof card.animate !== 'function') continue;
-            const first = before.get(card);
+            const first = before.get(card).bounds;
             const last = card.getBoundingClientRect();
             if (!first.width || !last.width || !last.height) continue;
             const x = first.left - last.left, y = first.top - last.top;
@@ -179,6 +298,7 @@
                 finishMotionClass();
             };
         }
+        revealFlavor(chosen, before, exitLayer);
         finishMotionClass();
     }
 
