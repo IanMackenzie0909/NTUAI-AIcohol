@@ -2,6 +2,26 @@
     "outputDirectory": "public",
     "rewrites": [
         {
+            "source": "/assets/:path*",
+            "destination": "/source/assets/:path*"
+        },
+        {
+            "source": "/feedback.js",
+            "destination": "/action/feedback.js"
+        },
+        {
+            "source": "/topics.js",
+            "destination": "/action/topics.js"
+        },
+        {
+            "source": "/topics.css",
+            "destination": "/source/styles/topics.css"
+        },
+        {
+            "source": "/ranking-theme.css",
+            "destination": "/source/styles/ranking-theme.css"
+        },
+        {
             "source": "/api/(.*)",
             "destination": "/api/$1"
         }

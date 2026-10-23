@@ -6,25 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIcohol：喝一杯，開啟一場跨域職涯的無限可能</title>
     <meta name="description" content="一場由 NTUAI (臺大 AI 社) 打造的微醺聊職涯體驗。9 大業界導師，Round Table 深度交流。">
-    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="icon" type="image/png" href="source/assets/icon.png">
 
     <!-- Open Graph -->
     <meta property="og:title" content="AIcohol：喝一杯，開啟一場跨域職涯的無限可能">
     <meta property="og:description" content="一場由 NTUAI (臺大 AI 社) 打造的微醺聊職涯體驗。9 大業界導師，Round Table 深度交流。">
-    <meta property="og:image" content="https://ntuai-aicohol-testing.vercel.app/assets/AIcohol_web_banner.jpg">
+    <meta property="og:image" content="https://ntuai-aicohol-testing.vercel.app/source/assets/AIcohol_web_banner.jpg">
     <meta property="og:type" content="website">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="AIcohol：喝一杯，開啟一場跨域職涯的無限可能">
     <meta name="twitter:description" content="一場由 NTUAI (臺大 AI 社) 打造的微醺聊職涯體驗。9 大業界導師，Round Table 深度交流。">
-    <meta name="twitter:image" content="https://ntuai-aicohol-testing.vercel.app/assets/AIcohol_web_banner.jpg">
+    <meta name="twitter:image" content="https://ntuai-aicohol-testing.vercel.app/source/assets/AIcohol_web_banner.jpg">
 
     <link
         href="https://fonts.googleapis.com/css2?family=Chiron+Hei+HK&family=Google+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="source/styles/topics.css">
+    <link rel="stylesheet" href="source/styles/ranking-theme.css">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VJZ2K72PMZ"></script>
@@ -45,7 +47,8 @@
     </script>
 
     <script src="script.js" defer></script>
-    <script src="feedback.js" defer></script>
+    <script src="action/feedback.js" defer></script>
+    <script src="action/topics.js" defer></script>
 
 </head>
 
@@ -53,21 +56,21 @@
 
     <!-- ── Navbar ── -->
     <nav id="navbar" class="hidden">
-        <a href="#hero" class="nav-logo"><img src="./assets/Glossy_Orange_Cocktail_Wordmark.png" alt="AIcohol"></a>
+        <a href="#hero" class="nav-logo"><img src="./source/assets/Glossy_Orange_Cocktail_Wordmark.png" alt="AIcohol"></a>
         <a href="#register" class="btn-orange">立即預約</a>
     </nav>
 
     <!-- ── Hero ── -->
     <section id="hero">
-        <img src="./assets/AIcohol_avatar_ian.png" alt="侍酒師 Ian" class="hero-avatar ian">
-        <img src="./assets/AIcohol_avatar_amy.png" alt="侍酒師 Amy" class="hero-avatar amy">
+        <img src="./source/assets/AIcohol_avatar_ian.png" alt="侍酒師 Ian" class="hero-avatar ian">
+        <img src="./source/assets/AIcohol_avatar_amy.png" alt="侍酒師 Amy" class="hero-avatar amy">
 
         <div class="hero-center">
             <div class="hero-logos">
-                <img src="./assets/AIcohol_logo.png" alt="Logo">
+                <img src="./source/assets/AIcohol_logo.png" alt="Logo">
             </div>
             <h1 class="hero-title-wrap">
-                <img src="./assets/Glossy_Orange_Cocktail_Wordmark.png" alt="AIcohol" class="hero-logotype">
+                <img src="./source/assets/Glossy_Orange_Cocktail_Wordmark.png" alt="AIcohol" class="hero-logotype">
             </h1>
             <p class="hero-sub">喝一杯，開啟一場跨域職涯的無限可能</p>
             <a href="#register" class="btn-orange btn-orange-lg">立即預約</a>
@@ -99,20 +102,37 @@
             <div class="topics-header">
                 <h2 id="topics-title">圓桌主題介紹</h2>
                 <div class="topics-header-divider"></div>
-                <ul class="topics-legend" aria-label="圓桌主題分類">
-                    <li class="topics-legend-item"><img src="./assets/icons/category-business.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"> 商業頭腦</li>
-                    <li class="topics-legend-item"><img src="./assets/icons/category-technical.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"> 技術取向</li>
-                    <li class="topics-legend-item"><img src="./assets/icons/category-cross-domain.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"> 跨域整合</li>
-                </ul>
+                <p class="topics-invitation">點選三種風味，探索適合你的圓桌特調；也可以依桌次逐一瀏覽。</p>
+                <div class="topics-flavors" role="group" aria-label="依風味探索圓桌">
+                    <button type="button" class="topics-flavor-button" data-topic-flavor="all" aria-pressed="true" aria-controls="topicsExplorer" disabled>全部桌次</button>
+                    <button type="button" class="topics-flavor-button" data-topic-flavor="business" aria-pressed="false" aria-controls="topicsExplorer" disabled><span>商業頭腦</span><span class="topics-flavor-note">威士忌風味</span></button>
+                    <button type="button" class="topics-flavor-button" data-topic-flavor="technical" aria-pressed="false" aria-controls="topicsExplorer" disabled><span>技術取向</span><span class="topics-flavor-note">琴酒風味</span></button>
+                    <button type="button" class="topics-flavor-button" data-topic-flavor="cross-domain" aria-pressed="false" aria-controls="topicsExplorer" disabled><span>跨域整合</span><span class="topics-flavor-note">苦甜風味</span></button>
+                </div>
             </div>
 
-            <div class="topics-grid">
+            <div id="topicsExplorer" class="topics-explorer">
+                <section id="topicsFlavor" class="topics-collection" aria-labelledby="topics-flavor-title" hidden>
+                    <header class="topics-collection-header">
+                        <div class="topics-collection-copy">
+                            <div class="topics-collection-title"><h3 id="topics-flavor-title"></h3><span id="topics-flavor-count" class="topics-flavor-count"></span></div>
+                            <p id="topics-flavor-drink" class="topics-collection-drink"></p>
+                            <p id="topics-flavor-chinese" class="topics-collection-chinese"></p>
+                            <div id="topics-flavor-tags" class="topics-tasting-tags"></div>
+                            <p id="topics-flavor-description" class="topics-collection-description"></p>
+                        </div>
+                        <img id="topics-flavor-image" class="topics-collection-image" alt="" width="180" height="200" decoding="async">
+                    </header>
+                    <div id="topicsFlavorGrid" class="topics-grid"></div>
+                </section>
+                <div id="topics-other-header" class="topics-other-header" hidden><h3>其他圓桌</h3><p>依桌次字母排序，隨時切換風味繼續探索。</p></div>
+                <div id="topicsAllGrid" class="topics-grid">
                 <article class="topic-card" data-table="A" data-topic-number="1" data-category="business" aria-labelledby="topic-A-title">
                     <p class="topic-number" aria-hidden="true">A</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Grace-topic-A.jpeg" alt="潘劭儒 Grace Pan" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Grace-topic-A.jpeg" alt="潘劭儒 Grace Pan" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE A <span class="topic-category-icon" role="img" aria-label="商業頭腦" title="商業頭腦"><img src="./assets/icons/category-business.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE A</p>
                             <h3 id="topic-A-title" class="topic-title">AI 資訊顧問</h3>
                             <p class="topic-speaker">潘劭儒 Grace Pan</p>
                         </div>
@@ -131,9 +151,9 @@
                 <article class="topic-card" data-table="B" data-topic-number="2" data-category="technical" aria-labelledby="topic-B-title">
                     <p class="topic-number" aria-hidden="true">B</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Yueh-Ting-Chen-topic-B.jpg" alt="陳約廷 Yueh-Ting Chen" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Yueh-Ting-Chen-topic-B.jpg" alt="陳約廷 Yueh-Ting Chen" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE B <span class="topic-category-icon" role="img" aria-label="技術取向" title="技術取向"><img src="./assets/icons/category-technical.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE B</p>
                             <h3 id="topic-B-title" class="topic-title">AI 推論與基礎架構</h3>
                             <p class="topic-speaker">陳約廷 Yueh-Ting Chen</p>
                         </div>
@@ -154,9 +174,9 @@
                 <article class="topic-card" data-table="C" data-topic-number="3" data-category="cross-domain" aria-labelledby="topic-C-title">
                     <p class="topic-number" aria-hidden="true">C</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Jeff-topic-C.jpg" alt="Jeff Hu" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Jeff-topic-C.jpg" alt="Jeff Hu" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE C <span class="topic-category-icon" role="img" aria-label="跨域整合" title="跨域整合"><img src="./assets/icons/category-cross-domain.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE C</p>
                             <h3 id="topic-C-title" class="topic-title">創業與商業開拓</h3>
                             <p class="topic-speaker">Jeff Hu</p>
                         </div>
@@ -175,9 +195,9 @@
                 <article class="topic-card" data-table="D" data-topic-number="4" data-category="business" aria-labelledby="topic-D-title">
                     <p class="topic-number" aria-hidden="true">D</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Samantha-topic-D.jpg" alt="Samantha Huang" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Samantha-topic-D.jpg" alt="Samantha Huang" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE D <span class="topic-category-icon" role="img" aria-label="商業頭腦" title="商業頭腦"><img src="./assets/icons/category-business.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE D</p>
                             <h3 id="topic-D-title" class="topic-title">MarTech × AI 行銷實踐</h3>
                             <p class="topic-speaker">Samantha Huang</p>
                         </div>
@@ -197,11 +217,11 @@
                     <p class="topic-number" aria-hidden="true">E</p>
                     <div class="topic-card-top">
                         <div class="topic-avatars" role="group" aria-label="鄭詠文與陳立翰">
-                            <span class="topic-avatar topic-avatar--yongwen"><img src="./assets/hosts/host-詠文-topic-E.jpg" alt="鄭詠文" title="鄭詠文" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
-                            <span class="topic-avatar topic-avatar--lihan"><img src="./assets/hosts/host-立翰-topic-E.jpg" alt="陳立翰" title="陳立翰" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
+                            <span class="topic-avatar topic-avatar--yongwen"><img src="./source/assets/hosts/host-詠文-topic-E.jpg" alt="鄭詠文" title="鄭詠文" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
+                            <span class="topic-avatar topic-avatar--lihan"><img src="./source/assets/hosts/host-立翰-topic-E.jpg" alt="陳立翰" title="陳立翰" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
                         </div>
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE E <span class="topic-category-icon" role="img" aria-label="商業頭腦" title="商業頭腦"><img src="./assets/icons/category-business.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE E</p>
                             <h3 id="topic-E-title" class="topic-title">AI 伺服器產品落地</h3>
                             <p class="topic-speaker">鄭詠文／陳立翰</p>
                         </div>
@@ -224,9 +244,9 @@
                 <article class="topic-card" data-table="F" data-topic-number="6" data-category="technical" aria-labelledby="topic-F-title">
                     <p class="topic-number" aria-hidden="true">F</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Edward-topic-F.jpg" alt="Edward Feng" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Edward-topic-F.jpg" alt="Edward Feng" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE F <span class="topic-category-icon" role="img" aria-label="技術取向" title="技術取向"><img src="./assets/icons/category-technical.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE F</p>
                             <h3 id="topic-F-title" class="topic-title">AI 輔助全端開發</h3>
                             <p class="topic-speaker">Edward Feng</p>
                         </div>
@@ -244,9 +264,9 @@
                 <article class="topic-card" data-table="G" data-topic-number="7" data-category="cross-domain" aria-labelledby="topic-G-title">
                     <p class="topic-number" aria-hidden="true">G</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Doppler-topic-G.jpg" alt="Doppler Kuo" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Doppler-topic-G.jpg" alt="Doppler Kuo" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE G <span class="topic-category-icon" role="img" aria-label="跨域整合" title="跨域整合"><img src="./assets/icons/category-cross-domain.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE G</p>
                             <h3 id="topic-G-title" class="topic-title">AI 產品技術決策</h3>
                             <p class="topic-speaker">Doppler Kuo</p>
                         </div>
@@ -265,9 +285,9 @@
                 <article class="topic-card" data-table="H" data-topic-number="8" data-category="technical" aria-labelledby="topic-H-title">
                     <p class="topic-number" aria-hidden="true">H</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Chou-topic-H.jpg" alt="周成康" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Chou-topic-H.jpg" alt="周成康" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE H <span class="topic-category-icon" role="img" aria-label="技術取向" title="技術取向"><img src="./assets/icons/category-technical.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE H</p>
                             <h3 id="topic-H-title" class="topic-title">語音模型在地化與應用研究</h3>
                             <p class="topic-speaker">周成康</p>
                         </div>
@@ -287,11 +307,11 @@
                     <p class="topic-number" aria-hidden="true">I</p>
                     <div class="topic-card-top">
                         <div class="topic-avatars" role="group" aria-label="姚睿銘與梁安哲">
-                            <span class="topic-avatar topic-avatar--raymin"><img src="./assets/hosts/host-Ray-Min-topic-I.jpg" alt="姚睿銘" title="姚睿銘" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
-                            <span class="topic-avatar"><img src="./assets/hosts/host-Z-Ann-topic-I.jpg" alt="梁安哲" title="梁安哲" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
+                            <span class="topic-avatar topic-avatar--raymin"><img src="./source/assets/hosts/host-Ray-Min-topic-I.jpg" alt="姚睿銘" title="姚睿銘" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
+                            <span class="topic-avatar"><img src="./source/assets/hosts/host-Z-Ann-topic-I.jpg" alt="梁安哲" title="梁安哲" class="topic-photo" width="80" height="80" loading="lazy" decoding="async"></span>
                         </div>
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE I <span class="topic-category-icon" role="img" aria-label="技術取向" title="技術取向"><img src="./assets/icons/category-technical.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE I</p>
                             <h3 id="topic-I-title" class="topic-title">AI 研究、社團幹部與學術觀察</h3>
                             <p class="topic-speaker">姚睿銘／梁安哲</p>
                         </div>
@@ -322,9 +342,9 @@
                 <article class="topic-card" data-table="J" data-topic-number="10" data-category="business" aria-labelledby="topic-J-title">
                     <p class="topic-number" aria-hidden="true">J</p>
                     <div class="topic-card-top">
-                        <img src="./assets/hosts/host-Yangju-topic-J.jpg" alt="Yangju" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
+                        <img src="./source/assets/hosts/host-Yangju-topic-J.jpg" alt="Yangju" class="topic-photo" width="80" height="80" loading="lazy" decoding="async">
                         <div class="topic-title-area">
-                            <p class="topic-table-label">TABLE J <span class="topic-category-icon" role="img" aria-label="商業頭腦" title="商業頭腦"><img src="./assets/icons/category-business.svg" class="topic-category-image" alt="" aria-hidden="true" width="20" height="20"></span></p>
+                            <p class="topic-table-label">TABLE J</p>
                             <h3 id="topic-J-title" class="topic-title">邊緣 AI 硬體 PM</h3>
                             <p class="topic-speaker">Yangju</p>
                         </div>
@@ -339,7 +359,10 @@
                         <a href="https://www.linkedin.com/in/yang-ju-chen-342b351b" target="_blank" rel="noopener noreferrer" class="topic-link" aria-label="Yangju LinkedIn" title="Yangju LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 20.45H16.9v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0Z"/></svg></a>
                     </div>
                 </article>
+                </div>
             </div>
+            <p id="topics-status" class="topics-sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+            <p class="topics-wine-note" hidden>酒款為圓桌主題的視覺比喻，非活動實際供酒品項。</p>
         </div>
     </section>
 
@@ -357,13 +380,13 @@
             </div>
 
             <div class="feedback-gallery">
-                <img src="./assets/feedback/AIcohoL-1st-1.jpg" alt="上屆 AIcohol 參與者在圓桌旁專注交流"
+                <img src="./source/assets/feedback/AIcohoL-1st-1.jpg" alt="上屆 AIcohol 參與者在圓桌旁專注交流"
                     width="1200" height="800" loading="lazy" decoding="async">
-                <img src="./assets/feedback/AIcohoL-1st-2.jpg" alt="上屆 AIcohol 講師與參與者的全體合照"
+                <img src="./source/assets/feedback/AIcohoL-1st-2.jpg" alt="上屆 AIcohol 講師與參與者的全體合照"
                     width="1200" height="800" loading="lazy" decoding="async">
-                <img src="./assets/feedback/AIcohoL-1st-3.jpg   " alt="上屆 AIcohol 參與者在自由交流時分享想法"
+                <img src="./source/assets/feedback/AIcohoL-1st-3.jpg" alt="上屆 AIcohol 參與者在自由交流時分享想法"
                     width="1200" height="800" loading="lazy" decoding="async">
-                <img src="./assets/feedback/AIcohoL-1st-4.jpg" alt="俯視上屆 AIcohol 參與者圍桌討論的現場"
+                <img src="./source/assets/feedback/AIcohoL-1st-4.jpg" alt="俯視上屆 AIcohol 參與者圍桌討論的現場"
                     width="1200" height="800" loading="lazy" decoding="async">
             </div>
 
@@ -644,7 +667,7 @@
                         <!-- Left: AI recommendation -->
                         <div>
                             <div class="sommelier-header">
-                                <img src="./assets/AIcohol_avatar_message.png" alt="Ian & Amy" class="sommelier-avatar">
+                                <img src="./source/assets/AIcohol_avatar_message.png" alt="Ian & Amy" class="sommelier-avatar">
                                 <div>
                                     <p class="sommelier-name">Ian & Amy</p>
                                     <p class="sommelier-subtitle">AI 侍酒師</p>
@@ -676,7 +699,7 @@
                         <!-- Right: Ranking list -->
                         <div>
                             <p class="ranking-label">圓桌志願排序</p>
-                            <p class="ranking-hint">長按卡片即可拖曳調整順序</p>
+                            <p class="ranking-hint">所有桌次皆可長按拖曳調整（包含第 4–10 志願）。可將任一桌移入前三志願，橘色標示會隨排序更新。</p>
                             <div id="rankingList" class="ranking-list"></div>
 
                             <div class="ranking-questions">

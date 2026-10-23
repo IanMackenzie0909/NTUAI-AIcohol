@@ -1,0 +1,144 @@
+/* Keep registration interactions in the event's orange palette. */
+#register .btn-primary {
+    background: var(--orange, #f56300);
+    color: #24140b;
+}
+
+#register .btn-primary:hover {
+    background: var(--orange-light, #ff8533);
+}
+
+#register .btn-primary:focus-visible,
+#register .btn-secondary:focus-visible,
+#register .form-confirm input[type="checkbox"]:focus-visible {
+    outline: 2px solid var(--orange-light, #ff8533);
+    outline-offset: 3px;
+}
+
+#register .field-input:focus {
+    border-color: var(--orange, #f56300);
+    box-shadow: 0 0 0 3px rgba(245, 99, 0, 0.25);
+}
+
+#register .form-confirm input[type="checkbox"]:checked {
+    background-color: var(--orange, #f56300);
+    border-color: var(--orange, #f56300);
+}
+
+#register .step-dot.active .circle {
+    background: var(--orange, #f56300);
+    border-color: var(--orange, #f56300);
+    color: #24140b;
+}
+
+#register .step-dot.done .circle {
+    border-color: var(--orange, #f56300);
+    color: var(--orange-light, #ff8533);
+}
+
+#register .spinner {
+    border-color: rgba(245, 99, 0, 0.3);
+    border-top-color: var(--orange-light, #ff8533);
+}
+
+#register #recomResult {
+    padding: 16px;
+    border: 1px solid rgba(245, 99, 0, 0.3);
+    border-radius: 12px;
+    background: rgba(245, 99, 0, 0.06);
+}
+
+#register #recomResult .recom-reason {
+    margin-bottom: 0;
+}
+
+#register .sommelier-subtitle {
+    color: var(--orange-light, #ff8533);
+}
+
+#register .ranking-hint {
+    color: rgba(255, 236, 216, 0.8);
+    line-height: 1.7;
+}
+
+#register .rank-item-side {
+    position: relative;
+    flex: 0 0 58px;
+    align-self: stretch;
+}
+
+#register .rank-item-meta {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transform: translateY(-50%);
+}
+
+#register .rank-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 58px;
+}
+
+#register .rank-category-label {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    margin: 0;
+    padding: 2px 3px;
+    border: 1px solid rgba(255, 133, 51, 0.23);
+    border-radius: 999px;
+    background: rgba(245, 99, 0, 0.08);
+    color: #ffb27b;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+#register .rank-item:hover {
+    border-color: rgba(245, 99, 0, 0.45);
+}
+
+#register .rank-item-grip {
+    stroke: rgba(255, 185, 126, 0.65);
+}
+
+#register .rank-item-top {
+    background: rgba(245, 99, 0, 0.12);
+    border-color: rgba(245, 99, 0, 0.45);
+    box-shadow: 0 0 12px rgba(245, 99, 0, 0.1);
+}
+
+#register .rank-item-top:hover {
+    border-color: rgba(245, 99, 0, 0.7);
+}
+
+#register .rank-badge-top {
+    color: #24140b;
+    background: var(--orange, #f56300);
+    border-color: var(--orange-light, #ff8533);
+}
+
+#register .rank-item.sortable-chosen {
+    border-color: var(--orange-light, #ff8533);
+    background: rgba(245, 99, 0, 0.18);
+    box-shadow: 0 0 16px rgba(245, 99, 0, 0.25);
+    cursor: grabbing;
+}
+
+#register .rank-item.sortable-drag {
+    border-color: var(--orange-light, #ff8533);
+    background: rgba(245, 99, 0, 0.18);
+}
+
+#register .rank-item.opacity-50 {
+    opacity: 0.45;
+    border-color: rgba(245, 99, 0, 0.6);
+    background: rgba(245, 99, 0, 0.12);
+}

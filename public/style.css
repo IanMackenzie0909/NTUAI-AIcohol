@@ -370,7 +370,7 @@ body {
 #about .bg {
     position: absolute;
     inset: 0;
-    background-image: url('./assets/AIcohol_intro.jpg');
+    background-image: url('./source/assets/AIcohol_intro.jpg');
     background-size: cover;
     background-position: center top;
     filter: brightness(0.7);

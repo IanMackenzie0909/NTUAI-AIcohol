@@ -1,16 +1,22 @@
 // ─── Theme data ───────────────────────────────────────────────────────────
 const themes = [
-    { id: 'table-a', table: 'A', title: 'AI 資訊顧問', desc: '潘劭儒 Grace Pan（全球財務轉型、Agentic AI 與 no-code 實務）。從企業痛點與 AI 工具應用，探索非工程背景的顧問職涯。' },
-    { id: 'table-b', table: 'B', title: 'AI 推論與基礎架構', desc: '陳約廷 Yueh-Ting Chen（NVIDIA；TensorRT-LLM、vLLM、LLVM 貢獻者）。交流 AI 推論、基礎架構、Agent 工作流與開源協作。' },
-    { id: 'table-c', table: 'C', title: '創業與商業開拓', desc: 'Jeff Hu（Turing Space CEO、Forbes Asia 30 Under 30）。從市場痛點、產品打造到募資，分享從 0 到 1 的創業實戰。' },
-    { id: 'table-d', table: 'D', title: 'MarTech × AI 行銷實踐', desc: 'Samantha Huang（漸強實驗室 Senior PMM、Appier PMM）。交流 AI 科技產品的跨國市場定位、產品溝通與行銷落地。' },
-    { id: 'table-e', table: 'E', title: 'AI 伺服器產品落地', desc: '鄭詠文（Quanta Project Manager；伺服器 NPI 物料管理與 AI 輔助缺料分析）、陳立翰（鴻海精密工業 Project Engineer）。交流客戶、研發與製造協作，從新產品導入到量產準備。' },
-    { id: 'table-f', table: 'F', title: 'AI 輔助全端開發', desc: 'Edward Feng（21 年後端至 SRE 經驗；Nurie AI AI Infra Architect）。分享 AI 輔助開發、測試與 DevOps，以及逐步建立信任的實戰。' },
-    { id: 'table-g', table: 'G', title: 'AI 產品技術決策', desc: 'Doppler Kuo（MetAI Product Manager、USPACE Head of Product）。從工程到 AI PM，交流團隊溝通、技術可行性與產品上線。' },
-    { id: 'table-h', table: 'H', title: '語音模型在地化與應用研究', desc: '周成康（資料導向 AI、領域適應與高效模型調適；開源 ASR 模型逾 20 萬次下載）。交流語音模型在地化與應用研究落地。' },
-    { id: 'table-i', table: 'I', title: 'AI 研究、社團幹部與學術觀察', desc: '姚睿銘／梁安哲（UBC、中研院研究；AMD、Quid 機器學習工程實習）。比較國內外研究與企業工作的發展路徑。' },
-    { id: 'table-j', table: 'J', title: '邊緣 AI 硬體 PM', desc: 'Yangju（ASUS AI 策略事業與品牌管理部門主管、Bosch Taiwan 專案經理、ASUS ProArt 產品系列企劃 PM）。AI 與硬體科技產品的市場定位，規劃產品藍圖與 GTM 策略，並探索硬體 PM 的發展方向。' }
+    { id: 'table-a', table: 'A', category: 'business', title: 'AI 資訊顧問', desc: '潘劭儒 Grace Pan（全球財務轉型、Agentic AI 與 no-code 實務）。從企業痛點與 AI 工具應用，探索非工程背景的顧問職涯。' },
+    { id: 'table-b', table: 'B', category: 'technical', title: 'AI 推論與基礎架構', desc: '陳約廷 Yueh-Ting Chen（NVIDIA；TensorRT-LLM、vLLM、LLVM 貢獻者）。交流 AI 推論、基礎架構、Agent 工作流與開源協作。' },
+    { id: 'table-c', table: 'C', category: 'cross-domain', title: '創業與商業開拓', desc: 'Jeff Hu（Turing Space CEO、Forbes Asia 30 Under 30）。從市場痛點、產品打造到募資，分享從 0 到 1 的創業實戰。' },
+    { id: 'table-d', table: 'D', category: 'business', title: 'MarTech × AI 行銷實踐', desc: 'Samantha Huang（漸強實驗室 Senior PMM、Appier PMM）。交流 AI 科技產品的跨國市場定位、產品溝通與行銷落地。' },
+    { id: 'table-e', table: 'E', category: 'business', title: 'AI 伺服器產品落地', desc: '鄭詠文（Quanta Project Manager；伺服器 NPI 物料管理與 AI 輔助缺料分析）、陳立翰（鴻海精密工業 Project Engineer）。交流客戶、研發與製造協作，從新產品導入到量產準備。' },
+    { id: 'table-f', table: 'F', category: 'technical', title: 'AI 輔助全端開發', desc: 'Edward Feng（21 年後端至 SRE 經驗；Nurie AI AI Infra Architect）。分享 AI 輔助開發、測試與 DevOps，以及逐步建立信任的實戰。' },
+    { id: 'table-g', table: 'G', category: 'cross-domain', title: 'AI 產品技術決策', desc: 'Doppler Kuo（MetAI Product Manager、USPACE Head of Product）。從工程到 AI PM，交流團隊溝通、技術可行性與產品上線。' },
+    { id: 'table-h', table: 'H', category: 'technical', title: '語音模型在地化與應用研究', desc: '周成康（資料導向 AI、領域適應與高效模型調適；開源 ASR 模型逾 20 萬次下載）。交流語音模型在地化與應用研究落地。' },
+    { id: 'table-i', table: 'I', category: 'technical', title: 'AI 研究、社團幹部與學術觀察', desc: '姚睿銘／梁安哲（UBC、中研院研究；AMD、Quid 機器學習工程實習）。比較國內外研究與企業工作的發展路徑。' },
+    { id: 'table-j', table: 'J', category: 'business', title: '邊緣 AI 硬體 PM', desc: 'Yangju（ASUS AI 策略事業與品牌管理部門主管、Bosch Taiwan 專案經理、ASUS ProArt 產品系列企劃 PM）。AI 與硬體科技產品的市場定位，規劃產品藍圖與 GTM 策略，並探索硬體 PM 的發展方向。' }
 ];
+
+const themeCategories = {
+    business: '商業頭腦',
+    technical: '技術取向',
+    'cross-domain': '跨域整合'
+};
 
 function isValidThemeOrder(order) {
     return Array.isArray(order) && order.length === themes.length
@@ -257,10 +263,17 @@ function renderRankingList() {
         div.dataset.id = theme.id;
         div.className = 'rank-item' + (isTop ? ' rank-item-top' : '');
         div.innerHTML = `
-            <span class="rank-badge${isTop ? ' rank-badge-top' : ''}">${idx + 1}</span>
-            <svg class="rank-item-grip" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M8 9h8M8 12h8M8 15h8" stroke-linecap="round"/>
-            </svg>
+            <div class="rank-item-side">
+                <div class="rank-item-meta">
+                    <div class="rank-item-controls">
+                        <span class="rank-badge${isTop ? ' rank-badge-top' : ''}">${idx + 1}</span>
+                        <svg class="rank-item-grip" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M8 9h8M8 12h8M8 15h8" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="rank-category-label" data-category="${theme.category}">${themeCategories[theme.category]}</span>
+                </div>
+            </div>
             <div class="rank-item-content">
                 <span class="rank-item-title">${theme.table} 桌｜${theme.title}</span>
                 <span class="rank-item-desc">${theme.desc}</span>
