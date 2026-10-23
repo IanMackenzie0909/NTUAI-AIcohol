@@ -2,6 +2,7 @@
 #topics [hidden] { display: none !important; }
 #topics { overflow-x: clip; }
 .topics-invitation { margin: 1rem 0 0; color: rgba(255,255,255,.65); font-size: .84rem; line-height: 1.8; }
+.topics-invitation + .topics-invitation { margin-top: 0; }
 .topics-flavors { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 1.5rem; }
 .topics-flavor-button {
     display: inline-flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px;
@@ -38,9 +39,7 @@
 }
 .topics-collection .topics-grid { grid-template-columns: minmax(0,1fr); gap: 18px; }
 .topics-collection .topic-card { border-color: rgba(255,255,255,.045); background: rgba(255,255,255,.028); backdrop-filter: none; -webkit-backdrop-filter: none; }
-.topics-other-header { margin: 36px 0 20px; }
-.topics-other-header h3 { margin: 0; color: #fff; font-size: 1.2rem; line-height: 1.5; }
-.topics-other-header p { margin: 5px 0 0; color: rgba(255,255,255,.55); font-size: .78rem; line-height: 1.7; }
+.topics-collection:not([hidden]) + .topics-grid { margin-top: 32px; }
 .topic-drink-pairing { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 14px 16px; border-radius: 18px; background: rgba(245,99,0,.075); }
 .topic-drink-icon { display: block; flex: 0 0 36px; width: 36px; height: 42px; }
 .topic-drink-copy { display: flex; flex-direction: column; gap: 5px; min-width: 0; }

@@ -74,8 +74,8 @@ test('requires a nonempty background for unemployed applicants before forwarding
     }
 });
 
-test('keeps professional and recent graduate roles compatible without a past background', async () => {
-    for (const role of ['professional', 'recent_graduate']) {
+test('forwards canonical employed and recent graduate roles while preserving legacy professional compatibility', async () => {
+    for (const role of ['employed', 'professional', 'recent_graduate']) {
         let forwarded;
         globalThis.fetch = async (_url, options) => {
             forwarded = JSON.parse(options.body);

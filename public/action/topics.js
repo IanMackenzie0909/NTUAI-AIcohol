@@ -5,7 +5,6 @@
     const allGrid = document.getElementById('topicsAllGrid');
     const flavorPanel = document.getElementById('topicsFlavor');
     const flavorGrid = document.getElementById('topicsFlavorGrid');
-    const otherHeader = document.getElementById('topics-other-header');
     const status = document.getElementById('topics-status');
     const buttons = [...document.querySelectorAll('[data-topic-flavor]')];
     // Table letters and numeric IDs remain the registration catalog's original IDs.
@@ -202,10 +201,6 @@
                 { opacity: 1, transform: 'translateY(0)' },
             ], { duration: 340, delay: 100 + index * 28 });
         });
-        reveal(otherHeader, [
-            { opacity: 0, transform: 'translateY(6px)' },
-            { opacity: 1, transform: 'translateY(0)' },
-        ], { duration: 320, delay: 50 });
     }
 
     function setFlavor(key, animate = true) {
@@ -248,7 +243,6 @@
         }
 
         flavorPanel.hidden = !flavor;
-        otherHeader.hidden = !flavor;
         flavorPanel.dataset.flavor = key;
         // Reparent original nodes, preserving all links, portraits and catalog IDs.
         for (const card of chosen) flavorGrid.appendChild(card);

@@ -93,6 +93,11 @@ Logo 與頁尾的社群連結仍指向 NTUAI 各社群。
 `gas/` 目前被 Git 忽略；推送 GitHub 或部署 Vercel 不會更新線上的 GAS。
 已寄出的信件不會改寫，新按鈕適用於更新 GAS 後寄出的信件。
 
+網站與 API 的身分代碼統一使用 `student`、`recent_graduate`、`employed`、
+`unemployed`。GAS 寫入 `role` 欄時才轉成「學生」、「畢業兩年內新鮮人」、
+「在職」、「待業」；舊表單送出的 `professional` 也會寫成「在職」。
+此轉換僅套用於新增資料，不會自動改寫試算表既有列。
+
 ### 上線確認與後續更新
 
 使用自己的 Email 完成一次報名，確認推薦正常、資料寫入正確分頁，

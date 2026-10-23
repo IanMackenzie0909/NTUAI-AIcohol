@@ -324,7 +324,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
         email: document.getElementById('email').value,
-        role: status === 'employed' ? 'professional' : status,
+        role: status,
         org: details.org || 'N/A',
         dept: details.dept || 'N/A',
         grade: details.grade || 'N/A',
