@@ -35,7 +35,7 @@ export default async function handler(req, res) {
         { table: 'G', title: 'AI 產品技術決策', description: '(AI Product Manager)：講者 Doppler Kuo（MetAI Product Manager、USPACE Head of Product、Appier Frontend Engineer、貝殼放大 Product Developer）。從寫 Code 到 AI PM，分享工程團隊溝通、技術可行性判斷，以及如何把 AI 功能做成真正能上線的產品，適合想從工程轉 PM、或想了解 AI 產品開發與跨團隊溝通的同學。' },
         { table: 'H', title: '語音模型在地化與應用研究', description: '(Applied Researcher)：講者周成康（Applied ML researcher，專注 data-centric AI、domain adaptation 與 efficient model adaptation；3 篇 IEEE 論文（2 篇第一作者）、開源 ASR 模型下載量 20 萬以上、AI 系統部署於工業產線）。從語音模型在地化出發，探索如何讓模型適應不同場域與情境需求，分享 Applied Research Scientist 從研究到實際落地的工作經驗，適合對語音模型、機器學習研究、深入探索學術領域的同學。' },
         { table: 'I', title: 'AI 研究、社團幹部與學術觀察', description: '(Research & Academia)：講者姚睿銘（英屬哥倫比亞大學 TeaLab Research Intern、前中研院 Research Intern、NTU AI Club Advisor 暨前 Technical Lead、臺大資工所 TriLab 碩士生）、梁安哲（AMD Machine Learning Engineer Intern、Quid Machine Learning Engineer Intern、TASA Embedded Systems Intern）。姚睿銘分享 AI 研究工作的日常與海內外學術經歷，探索不同研究環境與發展路徑；梁安哲分享從英國 AI 新創到 AMD 的實習工作與學習收穫，探索不同企業環境中的職涯方向，適合考慮出國或國內升學、想了解 AI 研究生活，或想爭取海內外 AI 實習的同學。' },
-        { table: 'J', title: '邊緣 AI 硬體 PM', description: '(Edge AI Hardware PM)：講者 Yangju Chen（華碩 ASUS AI 策略事業與品牌管理部門主管、博世 Bosch Taiwan 專案經理、華碩 ASUS ProArt 產品系列企劃 PM）。專注 AI 與硬體科技產品的市場定位，規劃產品藍圖與 Go-to-Market（GTM）策略，並探索硬體 PM 的發展方向，適合對硬體產品經理、產品規劃或科技業 AI 策略有興趣的同學。' },
+        { table: 'J', title: 'AI 硬體產品經理', description: '(AI Hardware PM)：講者 Yangju Chen（華碩 ASUS AI 策略事業與品牌管理部門主管、博世 Bosch Taiwan 專案經理、華碩 ASUS ProArt 產品系列企劃 PM）。專注 AI 與硬體科技產品的市場定位，規劃產品藍圖與 Go-to-Market（GTM）策略，並探索硬體 PM 的發展方向，適合對硬體產品經理、產品規劃或科技業 AI 策略有興趣的同學。' },
     ];
     const tableCount = tables.length;
     const exampleOrder = tables.map((_, index) => index + 1);
