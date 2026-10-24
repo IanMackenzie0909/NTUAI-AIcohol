@@ -6,22 +6,25 @@ const originalFetch = globalThis.fetch;
 const originalError = console.error;
 const originalWarn = console.warn;
 const originalSetTimeout = globalThis.setTimeout;
+const originalAbortSignalTimeout = AbortSignal.timeout;
 const originalGasUrl = process.env.GAS_SCRIPT_URL;
 const originalApiKey = process.env.API_KEY;
 let errors;
 let waits;
+let warnings;
 
 beforeEach(() => {
     process.env.GAS_SCRIPT_URL = 'https://example.test/exec';
     process.env.API_KEY = 'unit-test-shared-secret';
     errors = [];
     waits = [];
+    warnings = [];
     globalThis.setTimeout = (callback, milliseconds) => {
         waits.push(milliseconds);
         queueMicrotask(callback);
     };
     console.error = (...args) => errors.push(args);
-    console.warn = () => {};
+    console.warn = (...args) => warnings.push(args);
 });
 
 afterEach(() => {
@@ -29,6 +32,7 @@ afterEach(() => {
     console.error = originalError;
     console.warn = originalWarn;
     globalThis.setTimeout = originalSetTimeout;
+    AbortSignal.timeout = originalAbortSignalTimeout;
     if (originalGasUrl === undefined) delete process.env.GAS_SCRIPT_URL;
     else process.env.GAS_SCRIPT_URL = originalGasUrl;
     if (originalApiKey === undefined) delete process.env.API_KEY;
@@ -121,6 +125,26 @@ test('does not disclose the shared secret in upstream error logs or the client r
 
 const resultUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=result-token&lib=test-lib';
 
+function assertSafeResultRequests(requests) {
+    assert.equal(requests.filter(request => request.options.method === 'POST').length, 1);
+    assert.equal(requests[0].options.redirect, 'manual');
+    for (const { url, options } of requests.slice(1)) {
+        assert.equal(new URL(url).hostname, 'script.googleusercontent.com');
+        assert.equal(new URL(url).pathname, '/macros/echo');
+        assert.equal(options.method, 'GET');
+        assert.equal(options.redirect, 'manual');
+        assert.equal(options.body, undefined);
+        assert.equal(options.headers, undefined);
+    }
+}
+
+function assertPrivateDiagnostics(res) {
+    const diagnostics = JSON.stringify({ errors, warnings, response: res.body });
+    assert.ok(!diagnostics.includes('unit-test-shared-secret'));
+    assert.ok(!diagnostics.includes('result-token'));
+    assert.ok(!diagnostics.includes(resultUrl));
+}
+
 test('retrieves the ContentService response with a body-free GET after one POST', async () => {
     const requests = [];
     globalThis.fetch = async (url, options) => {
@@ -179,7 +203,7 @@ test('bounds result 404 retries and reports an unknown outcome without exposing 
     assert.ok(!JSON.stringify({ errors, response: res.body }).includes('result-token'));
 });
 
-test('does not retry an initial POST 404, a failed POST, or a non-404 result error', async () => {
+test('does not retry an initial POST 404, a failed POST, or a non-retryable result error', async () => {
     for (const scenario of ['post-404', 'post-timeout', 'result-403']) {
         const methods = [];
         globalThis.fetch = async (_url, options) => {
@@ -216,8 +240,8 @@ test('does not follow login, untrusted, or write-capable redirect destinations',
     }
 });
 
-test('never replays a POST for 307/308 or follows another result redirect', async () => {
-    for (const status of [307, 308]) {
+test('never replays a POST for initial 301/307/308 or follows an unsafe result redirect', async () => {
+    for (const status of [301, 307, 308]) {
         let calls = 0;
         globalThis.fetch = async () => {
             calls++;
@@ -245,5 +269,280 @@ test('does not accept a result redirect as success without a confirmed JSON stat
         assert.equal(res.statusCode, 502);
         assert.equal(res.body.submissionStatus, 'unknown');
         assert.equal(calls, 2);
+    }
+});
+
+test('recovers from a transient result network error or timeout without repeating POST or exposing diagnostics', async () => {
+    for (const failure of [
+        new TypeError(`Network failed at ${resultUrl} with unit-test-shared-secret`),
+        new DOMException(`Timed out at ${resultUrl} with unit-test-shared-secret`, 'TimeoutError'),
+    ]) {
+        const requests = [];
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+            if (requests.length === 2) throw failure;
+            return Response.json({ status: 'success' });
+        };
+        waits = [];
+        const res = await submit();
+        assert.equal(res.statusCode, 200);
+        assert.deepEqual(res.body, { ok: true });
+        assert.equal(requests.length, 3);
+        assert.deepEqual(waits, [1000]);
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
+    }
+});
+
+test('bounds transient result network errors and timeouts to four reads and reports unknown', async () => {
+    for (const failure of [
+        new TypeError(`Network failed at ${resultUrl} with unit-test-shared-secret`),
+        new DOMException(`Timed out at ${resultUrl} with unit-test-shared-secret`, 'TimeoutError'),
+    ]) {
+        const requests = [];
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+            throw failure;
+        };
+        waits = [];
+        const res = await submit();
+        assert.equal(res.statusCode, 502);
+        assert.equal(res.body.code, 'REGISTRATION_UNCONFIRMED');
+        assert.equal(res.body.submissionStatus, 'unknown');
+        assert.equal(requests.length, 5);
+        assert.deepEqual(waits, [1000, 2000, 3000]);
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
+    }
+});
+
+test('retries only the allowlisted result GET for transient HTTP result failures', async () => {
+    for (const status of [408, 429, 500, 502, 503, 504]) {
+        const requests = [];
+        const failed = new Response('Temporary failure with unit-test-shared-secret and result-token', { status });
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+            return requests.length === 2 ? failed : Response.json({ status: 'success' });
+        };
+        waits = [];
+        const res = await submit();
+        assert.equal(res.statusCode, 200);
+        assert.equal(requests.length, 3);
+        assert.deepEqual(waits, [1000]);
+        assert.equal(failed.bodyUsed, true);
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
+    }
+});
+
+test('follows safe result 301/302/303/307/308 redirects as body-free GETs', async () => {
+    const nextUrl = resultUrl.replace('result-token', 'result-token-next');
+    for (const status of [301, 302, 303, 307, 308]) {
+        const requests = [];
+        const redirect = new Response('Redirect response', { status, headers: { location: nextUrl } });
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+            return requests.length === 2 ? redirect : Response.json({ status: 'success' });
+        };
+        const res = await submit();
+        assert.equal(res.statusCode, 200);
+        assert.deepEqual(requests.map(request => request.url), ['https://example.test/exec', resultUrl, nextUrl]);
+        assert.equal(redirect.bodyUsed, true);
+        assert.deepEqual(waits, []);
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
+    }
+});
+
+test('bounds safe result redirects to three additional hops without replaying POST', async () => {
+    const requests = [];
+    const redirects = [];
+    globalThis.fetch = async (url, options) => {
+        requests.push({ url, options });
+        const redirect = new Response('Redirect response', {
+            status: 302,
+            headers: { location: resultUrl.replace('result-token', `result-token-${requests.length}`) },
+        });
+        redirects.push(redirect);
+        return redirect;
+    };
+    const res = await submit();
+    assert.equal(res.statusCode, 502);
+    assert.equal(res.body.submissionStatus, 'unknown');
+    assert.equal(requests.length, 5);
+    assert.ok(redirects.every(response => response.bodyUsed));
+    assert.deepEqual(waits, []);
+    assertSafeResultRequests(requests);
+    assertPrivateDiagnostics(res);
+});
+
+test('rejects unsafe result redirects before another GET and without leaking Location tokens', async () => {
+    for (const location of [
+        `https://evil.test/macros/echo?user_content_key=result-token&key=unit-test-shared-secret`,
+        'https://script.google.com/macros/s/deployment/exec',
+        'https://accounts.google.com/login',
+        'https://script.googleusercontent.com/macros/s/deployment/exec',
+        'https://user:password@script.googleusercontent.com/macros/echo',
+        'http://script.googleusercontent.com/macros/echo',
+        'https://script.googleusercontent.com:444/macros/echo',
+    ]) {
+        const requests = [];
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            return new Response(null, { status: 302, headers: { location: requests.length === 1 ? resultUrl : location } });
+        };
+        const res = await submit();
+        assert.equal(res.statusCode, 502);
+        assert.equal(res.body.submissionStatus, 'unknown');
+        assert.equal(requests.length, 2);
+        assert.deepEqual(waits, []);
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
+    }
+});
+
+test('shares retry and redirect budgets so at most seven result GETs can recover or exhaust', async () => {
+    for (const finalSuccess of [true, false]) {
+        const requests = [];
+        let reads = 0;
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            if (options.method === 'POST') return new Response(null, { status: 302, headers: { location: resultUrl } });
+            reads++;
+            if ([1, 3, 5].includes(reads)) {
+                return new Response(null, { status: 302, headers: { location: resultUrl.replace('result-token', `result-token-${reads}`) } });
+            }
+            if (reads === 4) throw new DOMException(`Timeout at ${resultUrl}`, 'TimeoutError');
+            return reads === 7 && finalSuccess ? Response.json({ status: 'success' }) : new Response('Not ready', { status: 503 });
+        };
+        waits = [];
+        const res = await submit();
+        assert.equal(reads, 7);
+        assert.equal(requests.length, 8);
+        assert.deepEqual(waits, [1000, 2000, 3000]);
+        if (finalSuccess) {
+            assert.equal(res.statusCode, 200);
+            assert.deepEqual(res.body, { ok: true });
+        } else {
+            assert.equal(res.statusCode, 502);
+            assert.equal(res.body.submissionStatus, 'unknown');
+        }
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
+    }
+});
+
+test('does not retry when the overall deadline expires during a failed result GET', async () => {
+    const controller = new AbortController();
+    AbortSignal.timeout = milliseconds => milliseconds === 90_000 ? controller.signal : originalAbortSignalTimeout(milliseconds);
+    const requests = [];
+    globalThis.fetch = async (url, options) => {
+        requests.push({ url, options });
+        if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+        const failure = new DOMException('Overall deadline exceeded with unit-test-shared-secret', 'TimeoutError');
+        controller.abort(failure);
+        throw failure;
+    };
+    const res = await submit();
+    assert.equal(res.statusCode, 502);
+    assert.equal(res.body.submissionStatus, 'unknown');
+    assert.equal(requests.length, 2);
+    assert.deepEqual(waits, []);
+    assertSafeResultRequests(requests);
+    assertPrivateDiagnostics(res);
+});
+
+test('does not start another result GET when the deadline expires during backoff', async () => {
+    const controller = new AbortController();
+    AbortSignal.timeout = milliseconds => milliseconds === 90_000 ? controller.signal : originalAbortSignalTimeout(milliseconds);
+    globalThis.setTimeout = (callback, milliseconds) => {
+        waits.push(milliseconds);
+        controller.abort(new DOMException('Overall deadline exceeded', 'TimeoutError'));
+        queueMicrotask(callback);
+    };
+    const requests = [];
+    globalThis.fetch = async (url, options) => {
+        requests.push({ url, options });
+        return requests.length === 1
+            ? new Response(null, { status: 302, headers: { location: resultUrl } })
+            : new Response('Not ready', { status: 404 });
+    };
+    const res = await submit();
+    assert.equal(res.statusCode, 502);
+    assert.equal(res.body.submissionStatus, 'unknown');
+    assert.equal(requests.length, 2);
+    assert.deepEqual(waits, [1000]);
+    assertSafeResultRequests(requests);
+    assertPrivateDiagnostics(res);
+});
+
+test('rejects a loop back to an already visited safe result URL without another GET or retry', async () => {
+    const nextUrl = resultUrl.replace('result-token', 'result-token-next');
+    const requests = [];
+    globalThis.fetch = async (url, options) => {
+        requests.push({ url, options });
+        return new Response(null, {
+            status: 302,
+            headers: { location: requests.length === 2 ? nextUrl : resultUrl },
+        });
+    };
+    const res = await submit();
+    assert.equal(res.statusCode, 502);
+    assert.equal(res.body.submissionStatus, 'unknown');
+    assert.deepEqual(requests.map(request => request.url), ['https://example.test/exec', resultUrl, nextUrl]);
+    assert.equal(errors[0][1].reason, 'result_redirect_loop');
+    assert.deepEqual(waits, []);
+    assertSafeResultRequests(requests);
+    assertPrivateDiagnostics(res);
+});
+
+test('retries a failed result body read after successful headers without replaying the POST', async () => {
+    for (const failure of [
+        new TypeError(`Body disconnected at ${resultUrl} with unit-test-shared-secret`),
+        new DOMException(`Body timeout at ${resultUrl} with unit-test-shared-secret`, 'TimeoutError'),
+    ]) {
+        const brokenResponse = new Response(new ReadableStream({ start(controller) { controller.error(failure); } }), { status: 200 });
+        const requests = [];
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+            return requests.length === 2 ? brokenResponse : Response.json({ status: 'success' });
+        };
+        waits = [];
+        const res = await submit();
+        assert.equal(res.statusCode, 200);
+        assert.equal(requests.length, 3);
+        assert.equal(brokenResponse.bodyUsed, true);
+        assert.deepEqual(waits, [1000]);
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
+    }
+});
+
+test('retries known network cause codes but not unrelated errors or private error names', async () => {
+    for (const retryable of [true, false]) {
+        const failure = new Error(`Request failed at ${resultUrl}`, {
+            cause: { code: retryable ? 'ECONNRESET' : 'unit-test-shared-secret result-token' },
+        });
+        if (!retryable) failure.name = 'unit-test-shared-secret result-token';
+        const requests = [];
+        globalThis.fetch = async (url, options) => {
+            requests.push({ url, options });
+            if (requests.length === 1) return new Response(null, { status: 302, headers: { location: resultUrl } });
+            if (requests.length === 2) throw failure;
+            return Response.json({ status: 'success' });
+        };
+        waits = [];
+        const res = await submit();
+        assert.equal(res.statusCode, retryable ? 200 : 502);
+        assert.equal(requests.length, retryable ? 3 : 2);
+        assert.deepEqual(waits, retryable ? [1000] : []);
+        if (!retryable) assert.equal(res.body.submissionStatus, 'unknown');
+        assertSafeResultRequests(requests);
+        assertPrivateDiagnostics(res);
     }
 });

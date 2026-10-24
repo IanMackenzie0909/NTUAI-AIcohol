@@ -98,6 +98,28 @@ Logo 與頁尾的社群連結仍指向 NTUAI 各社群。
 「在職」、「待業」；舊表單送出的 `professional` 也會寫成「在職」。
 此轉換僅套用於新增資料，不會自動改寫試算表既有列。
 
+### 報名結果回傳與診斷
+
+`api/register.js` 的報名 POST 只送一次。GAS ContentService 可能將結果轉到
+獨立網址；後續只允許以不含報名資料與金鑰標頭的 GET 讀取
+`https://script.googleusercontent.com/macros/echo`。每一跳都重新驗證網址，
+最多跟隨 3 次結果轉址；登入頁、其他主機、可執行 GAS 的網址與轉址迴圈會停止。
+
+結果 GET 的暫時網路錯誤、單次逾時及 HTTP 404/408/429/500/502/503/504
+可退避重試最多 3 次（1、2、3 秒）。轉址與重試合計最多 7 次 GET；
+每次讀取含 JSON body 的期限為 10 秒，整個流程共用 90 秒期限。
+只有最後收到 JSON `status: "success"` 才會確認成功。
+
+錯誤日誌保留 `stage`、`status`、`reason`、`responseAttempts`，另記錄
+`submitStatus`、`resultRetries`、`resultRedirects`、`attemptElapsedMs`、
+`timeoutKind` 與白名單錯誤名稱／代碼。`redirectTargetClass` 只記分類：
+`content_service` 是允許的結果端點，`google_login` 是 Google 登入頁，
+`gas_endpoint` 是 GAS 執行端點，其他目的地不會跟隨。
+日誌不包含完整結果網址、token、報名內容或任意上游錯誤文字。
+
+`REGISTRATION_UNCONFIRMED` 代表目前無法確認結果，不能據此認定尚未寫入。
+請先查確認信與試算表，避免自行重新送出造成重複報名。
+
 ### 上線確認與後續更新
 
 使用自己的 Email 完成一次報名，確認推薦正常、資料寫入正確分頁，
