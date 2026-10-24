@@ -9,7 +9,7 @@ const themes = [
     { id: 'table-g', table: 'G', category: 'cross-domain', title: 'AI 產品技術決策', desc: 'Doppler Kuo（MetAI Product Manager、USPACE Head of Product）。從工程到 AI PM，交流團隊溝通、技術可行性與產品上線。' },
     { id: 'table-h', table: 'H', category: 'technical', title: '語音模型在地化與應用研究', desc: '周成康（資料導向 AI、領域適應與高效模型調適；開源 ASR 模型逾 20 萬次下載）。交流語音模型在地化與應用研究落地。' },
     { id: 'table-i', table: 'I', category: 'technical', title: 'AI 研究、社團幹部與學術觀察', desc: '姚睿銘／梁安哲（UBC、中研院研究；AMD、Quid 機器學習工程實習）。比較國內外研究與企業工作的發展路徑。' },
-    { id: 'table-j', table: 'J', category: 'business', title: '邊緣 AI 硬體 PM', desc: 'Yangju（ASUS AI 策略事業與品牌管理部門主管、Bosch Taiwan 專案經理、ASUS ProArt 產品系列企劃 PM）。AI 與硬體科技產品的市場定位，規劃產品藍圖與 GTM 策略，並探索硬體 PM 的發展方向。' }
+    { id: 'table-j', table: 'J', category: 'business', title: 'AI 硬體產品經理', desc: 'Yangju Chen（ASUS AI 策略事業與品牌管理部門主管、Bosch Taiwan 專案經理、ASUS ProArt 產品系列企劃 PM）。AI 與硬體科技產品的市場定位，規劃產品藍圖與 GTM 策略，並探索硬體 PM 的發展方向。' }
 ];
 
 const themeCategories = {
