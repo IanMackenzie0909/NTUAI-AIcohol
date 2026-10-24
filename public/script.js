@@ -118,6 +118,8 @@ function getStatusDetails() {
 
 // ─── Step navigation ──────────────────────────────────────────────────────
 function nextStep(step) {
+    if (submissionState === 'success') return;
+
     if (step > currentStep) {
         let valid = true;
 
@@ -300,6 +302,20 @@ function renderRankingList() {
 }
 
 // ─── Form submit ──────────────────────────────────────────────────────────
+function showRegistrationSuccess() {
+    submissionState = 'success';
+    document.querySelectorAll('.form-step').forEach(step => step.classList.add('hidden'));
+    document.querySelector('.closed-screen')?.classList.add('hidden');
+    document.getElementById('registrationForm').classList.remove('hidden');
+    document.getElementById('successScreen').classList.remove('hidden');
+    document.getElementById('resultMessage').classList.add('hidden');
+    document.getElementById('submitBtn').disabled = true;
+    document.querySelectorAll('a[href="#register"]').forEach(link => {
+        link.textContent = '申請已送出';
+    });
+    document.getElementById('register').scrollIntoView({ behavior: 'auto', block: 'start' });
+}
+
 document.getElementById('registrationForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     // A lost response can follow a successful write; do not submit it again.
@@ -365,9 +381,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             throw new Error(`Registration response not confirmed (HTTP ${res.status})`);
         }
 
-        submissionState = 'success';
-        document.getElementById('step3').classList.add('hidden');
-        document.getElementById('successScreen').classList.remove('hidden');
+        showRegistrationSuccess();
     } catch (err) {
         console.error('Submit error:', err);
         submissionState = retryableFailure ? 'idle' : 'unknown';
@@ -414,3 +428,8 @@ window.addEventListener('scroll', updateHeroAvatarMotion, { passive: true });
 window.addEventListener('resize', updateHeroAvatarMotion);
 toggleNavbarVisibility();
 updateHeroAvatarMotion();
+
+// This email entry selects a generic view; it does not verify a registration.
+if (new URLSearchParams(window.location.search).get('from') === 'confirmation') {
+    showRegistrationSuccess();
+}

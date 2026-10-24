@@ -78,8 +78,14 @@ the static HTML also stays readable when JavaScript is unavailable.
 ### 更新 GAS 確認信
 
 本機完整程式為 `gas/registration.gs`。主按鈕已改成「AIcohol 活動官網 ➔」，
-指向正式官網；Banner 保留 `AIcohol_intro.jpg`，改由正式官網提供。
+指向 `https://ntuai-alcohol-round-ii.vercel.app/?from=confirmation#register`；
+Banner 保留 `AIcohol_intro.jpg`，改由正式官網提供。
 Logo 與頁尾的社群連結仍指向 NTUAI 各社群。
+
+信件入口會直接顯示原有的「申請已送出」畫面，隱藏填寫步驟，並將頁面上的
+「立即預約」改為「申請已送出」。活動內容仍可瀏覽；重新整理或轉傳完整連結
+都會保留這個畫面。一般官網入口仍顯示報名表單。
+這是通用畫面切換，不會查驗報名、讀取個資或阻擋同一人從一般入口再次報名。
 
 1. 將該程式碼更新至 Google Apps Script 專案。
 2. 在「專案設定 → 指令碼屬性」確認 `API_KEY`、`SPREADSHEET_ID`、`SHEET_NAME`。
