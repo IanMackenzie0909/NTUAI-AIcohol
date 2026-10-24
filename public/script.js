@@ -303,17 +303,23 @@ function renderRankingList() {
 
 // ─── Form submit ──────────────────────────────────────────────────────────
 function showRegistrationSuccess() {
+    const successScreen = document.getElementById('successScreen');
     submissionState = 'success';
     document.querySelectorAll('.form-step').forEach(step => step.classList.add('hidden'));
     document.querySelector('.closed-screen')?.classList.add('hidden');
     document.getElementById('registrationForm').classList.remove('hidden');
-    document.getElementById('successScreen').classList.remove('hidden');
+    successScreen.classList.remove('hidden');
     document.getElementById('resultMessage').classList.add('hidden');
     document.getElementById('submitBtn').disabled = true;
     document.querySelectorAll('a[href="#register"]').forEach(link => {
         link.textContent = '申請已送出';
     });
-    document.getElementById('register').scrollIntoView({ behavior: 'auto', block: 'start' });
+    document.getElementById('successHeading').focus({ preventScroll: true });
+    // Let the collapsed form render before positioning the confirmation content.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        successScreen.style.scrollMarginTop = `${document.getElementById('navbar').offsetHeight + 16}px`;
+        successScreen.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }));
 }
 
 document.getElementById('registrationForm').addEventListener('submit', async function (e) {
