@@ -9,7 +9,7 @@
         }
         var email = value.trim();
         if (/[\u3000-\u303f\uff00-\uffef]/.test(email)) {
-            return invalid('Email 請使用半形英文字母與標點，例如 name@gmail.com；請檢查全形 @、句點或逗號。');
+            return invalid('Email 請使用半形英文字母與標點，例如 name@gmail.com；請檢查全形＠或標點符號。');
         }
         if (/\s/.test(email)) return invalid('Email 中間不能有空白，請檢查後再試。');
         if (email.length > 254 || email.split('@').length !== 2) {
@@ -26,7 +26,7 @@
         if (labels.length < 2 || labels.some(function(label) {
             return !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label);
         }) || !/^(?:[a-z]{2,63}|xn--[a-z0-9-]{2,59})$/.test(labels[labels.length - 1])) {
-            return invalid('Email 網域格式有誤，請檢查 @ 後的網域與句點，例如 gmail.com。');
+            return invalid('Email 網域格式有誤，請檢查 @ 後的網域與標點符號，例如 gmail.com。');
         }
         var commonTypos = {
             'gmial.com': 'gmail.com', 'gamil.com': 'gmail.com', 'gmai.com': 'gmail.com',
@@ -49,7 +49,7 @@
         return {
             valid: true,
             email: local + '@' + domain,
-            message: suggestedDomain ? 'Email 網域可能有誤，請確認建議信箱，或明確勾選使用原信箱。' : '',
+            message: suggestedDomain ? 'Email 網域可能有誤，請確認建議信箱，或勾選使用原信箱。' : '',
             suggestion: suggestedDomain ? local + '@' + suggestedDomain : null
         };
     }
