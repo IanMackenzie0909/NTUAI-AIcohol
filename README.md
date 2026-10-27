@@ -15,11 +15,13 @@ public/
 │       ├── topics.css         # Flavor exploration and roundtable cards
 │       ├── ranking-theme.css  # Orange registration theme and category badges
 │       ├── page-motion.css    # Once-only scroll reveals
+│       ├── email-validation.css # Email suggestions and mail follow-up notices
 │       └── comeback.css       # Warm headline entrance effects
 └── action/
     ├── topics.js              # Animated flavor grouping and cocktail details
     ├── feedback.js            # Feedback carousel and counter animations
     ├── page-motion.js         # Viewport reveals with readable fallbacks
+    ├── email-validation.js    # Shared browser/API email format and domain typo checks
     └── comeback.js            # Strong comeback headline entrance
 ```
 
@@ -103,6 +105,34 @@ Logo 與頁尾的社群連結仍指向 NTUAI 各社群。
 `unemployed`。GAS 寫入 `role` 欄時才轉成「學生」、「畢業兩年內新鮮人」、
 「在職」、「待業」；舊表單送出的 `professional` 也會寫成「在職」。
 此轉換僅套用於新增資料，不會自動改寫試算表既有列。
+
+### 信箱防錯與確認信補寄
+
+前端新增「再次確認 Email」。網站、`api/register.js` 及 GAS 都檢查格式、
+全形標點、地址內空白、連續句點與常見網域誤植，包括 Gmail、Yahoo
+（含 `.com.tw`）、Outlook、Hotmail、iCloud、Live／MSN。
+外側空白與網域大小寫可規格化；疑似錯字只提供建議，必須由填寫者更正
+或明確確認原信箱，不會自動換成另一個地址。合法但拼錯的帳號仍需本人核對，
+這些檢查無法證明信箱存在或郵件已送達。
+
+GAS 保留 A:R 原報名欄位，S:Y 新增報名列識別值、寄信狀態、嘗試收件者、
+嘗試時間與次數、錯誤代碼、寄出時間。資料已寫入但寄信異常時，網站仍顯示
+已收件，另提示聯絡主辦確認或補寄，避免再次報名。
+
+管理者更新 GAS 完整程式並部署新版本後，可在編輯器執行：
+
+1. `auditRegistrationEmails()`：標記需要確認的信箱，不寄信。
+2. 向報名者確認正確地址，修正原資料列的 C 欄 `email`。
+3. 在指令碼屬性設定 `RESEND_ROW_NUMBERS`，例如 `2,5,8`（每次最多 10 列）。
+   舊資料的寄信結果為 `unknown`；確認要處理這些列後，另設 `RESEND_ALLOW_UNKNOWN=true`。
+4. 執行 `previewSelectedConfirmationEmails()`，核對預覽中的列號及是否符合補寄條件。
+5. 10 分鐘內執行 `resendSelectedConfirmationEmails()`，只對符合條件的既有列補寄，
+   不新增報名；完成後清除上述補寄選取設定。
+
+預覽後的資料若改動，必須重新預覽。`sent` 且收件者未變的列會略過；
+`sending` 不會再次寄送。補寄工具只供管理者在 GAS 編輯器執行，沒有公開 HTTP 入口。
+Gmail 成功返回只代表寄送請求成功；地址不存在仍可能稍後退信。
+完整操作及狀態說明見 `docs/gas-email-recovery.md`（本機文件）。
 
 ### 報名結果回傳與診斷
 

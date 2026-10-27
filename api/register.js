@@ -1,3 +1,5 @@
+import '../public/action/email-validation.js';
+
 // api/register.js – Vercel Serverless Function
 // Proxies registration data to Google Apps Script (Google Sheets backend)
 // Environment variables required:
@@ -101,6 +103,22 @@ export default async function handler(req, res) {
         }
     }
 
+    const checkedEmail = globalThis.EmailValidation.inspect(body.email);
+    if (!checkedEmail.valid) {
+        return res.status(400).json({ error: checkedEmail.message, code: 'INVALID_EMAIL', field: 'email' });
+    }
+    if (checkedEmail.suggestion && body.email_typo_confirmed !== true) {
+        return res.status(400).json({
+            error: checkedEmail.message, code: 'EMAIL_TYPO', field: 'email', suggestion: checkedEmail.suggestion,
+        });
+    }
+    if (body.email_confirm !== undefined) {
+        const confirmation = globalThis.EmailValidation.inspect(body.email_confirm);
+        if (!confirmation.valid || confirmation.email !== checkedEmail.email) {
+            return res.status(400).json({ error: '兩次填寫的 Email 不一致，請確認後再送出。', code: 'EMAIL_CONFIRM_MISMATCH', field: 'email_confirm' });
+        }
+    }
+
     if (body.role === 'unemployed' && (typeof body.past_background !== 'string' || !body.past_background.trim())) {
         return res.status(400).json({ error: 'Missing or invalid field: past_background' });
     }
@@ -108,6 +126,8 @@ export default async function handler(req, res) {
     // Forward to Google Apps Script
     const payload = {
         ...body,
+        email: checkedEmail.email,
+        ...(body.email_confirm !== undefined ? { email_confirm: checkedEmail.email } : {}),
         apiKey: API_KEY,
     };
 
@@ -250,6 +270,16 @@ export default async function handler(req, res) {
             gasData = await gasRes.json();
         }
 
+        // These explicit validation codes are returned by GAS only before any write.
+        if (gasData?.status === 'error' && ['INVALID_EMAIL', 'EMAIL_TYPO', 'EMAIL_CONFIRM_MISMATCH'].includes(gasData.code)) {
+            return res.status(400).json({
+                error: gasData.code === 'EMAIL_CONFIRM_MISMATCH'
+                    ? '兩次填寫的 Email 不一致，請確認後再送出。' : 'Email 尚未通過檢查，請回到信箱欄位確認。',
+                code: gasData.code,
+                field: gasData.code === 'EMAIL_CONFIRM_MISMATCH' ? 'email_confirm' : 'email',
+            });
+        }
+
         // Match the doPost contract: only a confirmed success is accepted.
         if (gasData?.status !== 'success') {
             // Older GAS catch blocks can return an error after appendRow has already succeeded.
@@ -258,11 +288,16 @@ export default async function handler(req, res) {
             throw new Error('GAS did not confirm registration');
         }
 
-        if (gasData.mailSent === false) {
-            console.warn('Registration saved, but GAS could not send the confirmation email');
+        if (gasData.mailSent === false || ['unknown', 'sending', 'failed'].includes(gasData.mailStatus)) {
+            console.warn('Registration saved; confirmation email status requires review');
         }
 
-        return res.status(200).json({ ok: true });
+        return res.status(200).json({
+            ok: true,
+            ...(typeof gasData.mailSent === 'boolean' ? { mailSent: gasData.mailSent } : {}),
+            ...(['sent', 'failed', 'unknown', 'sending', 'invalid_email', 'needs_review'].includes(gasData.mailStatus)
+                ? { mailStatus: gasData.mailStatus } : {}),
+        });
     } catch (error) {
         // Do not log the result URL/token, shared secret, payload, or arbitrary GAS error text.
         console.error('GAS forwarding error:', {

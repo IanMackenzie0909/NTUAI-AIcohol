@@ -1,0 +1,67 @@
+.email-help {
+    margin: 8px 0 0;
+}
+
+.email-suggestion,
+.mail-delivery-notice {
+    margin-top: 12px;
+    padding: 16px 18px;
+    border: 1px solid rgba(255, 133, 51, 0.32);
+    border-radius: 18px;
+    background: rgba(245, 99, 0, 0.08);
+    color: #ffe8c2;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+.email-suggestion p {
+    margin: 0 0 12px;
+}
+
+.email-suggestion-button {
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 133, 51, 0.55);
+    border-radius: 999px;
+    background: rgba(245, 99, 0, 0.16);
+    color: #ffe8c2;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.email-suggestion-button:hover {
+    background: rgba(245, 99, 0, 0.28);
+}
+
+.email-suggestion-button:focus-visible,
+.email-original-confirm input:focus-visible {
+    outline: 2px solid var(--orange-light);
+    outline-offset: 3px;
+}
+
+.email-original-confirm {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 14px;
+    cursor: pointer;
+}
+
+.email-original-confirm input {
+    flex-shrink: 0;
+    width: 17px;
+    height: 17px;
+    margin: 4px 0 0;
+    accent-color: var(--orange);
+}
+
+.mail-delivery-notice {
+    margin: 22px auto 0;
+    max-width: 620px;
+}
+
+.mail-delivery-notice a {
+    color: #ffc58a;
+    text-underline-offset: 3px;
+}

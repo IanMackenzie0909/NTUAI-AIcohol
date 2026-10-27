@@ -34,10 +34,10 @@ let initialAiReasons = '';
 const validate = {
     name: v => /^[\u4e00-\u9fa5]{2,10}$/.test(v),
     phone: v => /^09\d{8}$|^09\d{2}-\d{3}-\d{3}$/.test(v),
-    email: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+    email: v => EmailValidation.inspect(v).valid
 };
 
-['name', 'phone', 'email'].forEach(id => {
+['name', 'phone'].forEach(id => {
     const input = document.getElementById(id);
     const error = document.getElementById(`${id}Error`);
     input.addEventListener('input', () => {
@@ -49,6 +49,75 @@ const validate = {
             input.style.borderColor = '';
         }
     });
+});
+
+function setEmailFieldError(id, message) {
+    const input = document.getElementById(id);
+    const error = document.getElementById(`${id}Error`);
+    error.textContent = message;
+    error.classList.toggle('hidden', !message);
+    input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    input.style.borderColor = message ? 'rgba(248,113,113,0.5)' : '';
+}
+
+function validateEmailFields({ requireValues = false } = {}) {
+    const input = document.getElementById('email');
+    const confirmation = document.getElementById('emailConfirm');
+    const email = EmailValidation.inspect(input.value);
+    const repeated = EmailValidation.inspect(confirmation.value);
+    const confirmedTypo = document.getElementById('emailTypoConfirmed').checked;
+    const hasSuggestion = email.valid && !!email.suggestion;
+    document.getElementById('emailSuggestion').classList.toggle('hidden', !hasSuggestion);
+    document.getElementById('emailSuggestionAddress').textContent = hasSuggestion ? email.suggestion : '';
+
+    let emailError = !email.valid && (requireValues || input.value) ? email.message : '';
+    if (hasSuggestion && !confirmedTypo && requireValues) {
+        emailError = '請採用建議信箱，或勾選確認仍使用原信箱後再繼續。';
+    }
+    let confirmationError = '';
+    if (requireValues || confirmation.value) {
+        if (!repeated.valid) confirmationError = confirmation.value ? repeated.message : '請再次輸入 Email。';
+        else if (email.valid && email.email !== repeated.email) confirmationError = '兩次填寫的 Email 不一致，請重新確認。';
+    }
+    setEmailFieldError('email', emailError);
+    setEmailFieldError('emailConfirm', confirmationError);
+    return {
+        valid: email.valid && repeated.valid && email.email === repeated.email && (!hasSuggestion || confirmedTypo),
+        email: email.email,
+        confirmation: repeated.email,
+        typoConfirmed: hasSuggestion && confirmedTypo,
+        errorField: emailError || !email.valid ? 'email' : 'emailConfirm',
+    };
+}
+
+function returnToEmailField(id, message) {
+    nextStep(1);
+    if (message) setEmailFieldError(id, message);
+    const input = document.getElementById(id);
+    input.focus({ preventScroll: true });
+    input.scrollIntoView({ behavior: 'instant', block: 'center' });
+}
+
+document.getElementById('email').addEventListener('input', () => {
+    document.getElementById('emailTypoConfirmed').checked = false;
+    validateEmailFields();
+});
+document.getElementById('emailConfirm').addEventListener('input', () => validateEmailFields());
+document.getElementById('emailTypoConfirmed').addEventListener('change', () => validateEmailFields());
+['email', 'emailConfirm'].forEach(id => {
+    document.getElementById(id).addEventListener('blur', () => {
+        const result = EmailValidation.inspect(document.getElementById(id).value);
+        if (result.valid) document.getElementById(id).value = result.email;
+        validateEmailFields();
+    });
+});
+document.getElementById('useSuggestedEmail').addEventListener('click', () => {
+    const result = EmailValidation.inspect(document.getElementById('email').value);
+    if (!result.valid || !result.suggestion) return;
+    document.getElementById('email').value = result.suggestion;
+    document.getElementById('emailTypoConfirmed').checked = false;
+    validateEmailFields();
+    document.getElementById('emailConfirm').focus();
 });
 
 // ─── Dynamic status fields ────────────────────────────────────────────────
@@ -125,7 +194,7 @@ function nextStep(step) {
 
         if (currentStep === 1) {
             const status = document.getElementById('userStatus').value;
-            const required = ['name', 'phone', 'email', 'userStatus'];
+            const required = ['name', 'phone', 'email', 'emailConfirm', 'userStatus'];
 
             if (status === 'student') required.push('profDetail1', 'profDetail2', 'profDetail3');
             else if (status === 'employed' || status === 'recent_graduate') required.push('profDetail1', 'profDetail2');
@@ -143,7 +212,7 @@ function nextStep(step) {
 
             if (!validate.name(document.getElementById('name').value)) { document.getElementById('nameError').classList.remove('hidden'); valid = false; }
             if (!validate.phone(document.getElementById('phone').value)) { document.getElementById('phoneError').classList.remove('hidden'); valid = false; }
-            if (!validate.email(document.getElementById('email').value)) { document.getElementById('emailError').classList.remove('hidden'); valid = false; }
+            if (!validateEmailFields({ requireValues: true }).valid) valid = false;
         }
 
         if (currentStep === 2) {
@@ -302,7 +371,7 @@ function renderRankingList() {
 }
 
 // ─── Form submit ──────────────────────────────────────────────────────────
-function showRegistrationSuccess() {
+function showRegistrationSuccess(mailSent, mailStatus) {
     const successScreen = document.getElementById('successScreen');
     submissionState = 'success';
     document.querySelectorAll('.form-step').forEach(step => step.classList.add('hidden'));
@@ -310,6 +379,8 @@ function showRegistrationSuccess() {
     document.getElementById('registrationForm').classList.remove('hidden');
     successScreen.classList.remove('hidden');
     document.getElementById('resultMessage').classList.add('hidden');
+    const mailNeedsReview = mailSent === false || ['unknown', 'sending', 'failed'].includes(mailStatus);
+    document.getElementById('mailDeliveryNotice').classList.toggle('hidden', !mailNeedsReview);
     document.getElementById('submitBtn').disabled = true;
     document.querySelectorAll('a[href="#register"]').forEach(link => {
         link.textContent = '申請已送出';
@@ -326,6 +397,12 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     e.preventDefault();
     // A lost response can follow a successful write; do not submit it again.
     if (submissionState !== 'idle') return;
+
+    const emailCheck = validateEmailFields({ requireValues: true });
+    if (!emailCheck.valid) {
+        returnToEmailField(emailCheck.errorField);
+        return;
+    }
 
     const confirmCheckbox = document.getElementById('confirmCheckbox');
     if (!confirmCheckbox.checked) {
@@ -345,7 +422,9 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
     const payload = {
         name: document.getElementById('name').value,
         phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
+        email: emailCheck.email,
+        email_confirm: emailCheck.confirmation,
+        email_typo_confirmed: emailCheck.typoConfirmed,
         role: status,
         org: details.org || 'N/A',
         dept: details.dept || 'N/A',
@@ -364,6 +443,8 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
 
     let retryableFailure = false;
     let failureMessage = '';
+    let rejectedEmailField = '';
+    let rejectedEmailMessage = '';
     try {
         const res = await fetch('/api/register', {
             method: 'POST',
@@ -384,10 +465,18 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             failureMessage = res.status === 500
                 ? '系統設定尚未完成，這次資料未送出。請稍後再試或聯絡主辦單位。'
                 : '這次報名未被接受，請確認填寫內容，或聯絡主辦單位後再試。';
+            if (res.status === 400 && ['email', 'email_confirm'].includes(data?.field)) {
+                rejectedEmailField = data.field === 'email_confirm' ? 'emailConfirm' : 'email';
+                const emailMessage = [data.message, data.error].find(value =>
+                    typeof value === 'string' && value.trim() && value.length <= 300);
+                rejectedEmailMessage = emailMessage || '請檢查 Email，確認後重新送出。';
+                failureMessage = rejectedEmailMessage;
+                retryableFailure = true;
+            }
             throw new Error(`Registration response not confirmed (HTTP ${res.status})`);
         }
 
-        showRegistrationSuccess();
+        showRegistrationSuccess(data.mailSent, data.mailStatus);
     } catch (err) {
         console.error('Submit error:', err);
         submissionState = retryableFailure ? 'idle' : 'unknown';
@@ -399,6 +488,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         msg.classList.remove('hidden');
         submitBtn.disabled = !retryableFailure;
         submitBtn.innerText = retryableFailure ? '確認後重新送出' : '請先確認報名狀態';
+        if (rejectedEmailField) returnToEmailField(rejectedEmailField, rejectedEmailMessage);
     }
 });
 

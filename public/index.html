@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="source/styles/ranking-theme.css">
     <link rel="stylesheet" href="source/styles/page-motion.css">
     <link rel="stylesheet" href="source/styles/comeback.css">
+    <link rel="stylesheet" href="source/styles/email-validation.css">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VJZ2K72PMZ"></script>
@@ -48,6 +49,7 @@
         })(window, document, "clarity", "script", "r686l4p8t9");
     </script>
 
+    <script src="action/email-validation.js" defer></script>
     <script src="script.js" defer></script>
     <script src="action/feedback.js" defer></script>
     <script src="action/topics.js" defer></script>
@@ -560,7 +562,7 @@
                 </p>
             </div>
 
-            <form id="registrationForm">
+            <form id="registrationForm" novalidate>
 
                 <!-- ── Step 1 ── -->
                 <div id="step1" class="form-step form-step-inner">
@@ -581,9 +583,27 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="field-label">Email</label>
-                        <input type="email" id="email" class="field-input" placeholder="example@gmail.com">
-                        <p id="emailError" class="hidden field-error">請檢查 Email 格式</p>
+                        <label for="email" class="field-label">Email</label>
+                        <input type="email" id="email" class="field-input" placeholder="example@gmail.com"
+                            autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false"
+                            maxlength="254" aria-describedby="emailHint emailError" required>
+                        <p id="emailHint" class="field-help email-help">確認信與申請結果將寄到此信箱，請確認帳號與網域都正確。</p>
+                        <p id="emailError" class="hidden field-error" role="alert"></p>
+                        <div id="emailSuggestion" class="hidden email-suggestion" role="status" aria-live="polite">
+                            <p>信箱網域可能有誤，是否要改用 <strong id="emailSuggestionAddress"></strong>？</p>
+                            <button type="button" id="useSuggestedEmail" class="email-suggestion-button">改用建議信箱</button>
+                            <label class="email-original-confirm">
+                                <input type="checkbox" id="emailTypoConfirmed">
+                                <span>我已確認，仍使用原本填寫的信箱</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailConfirm" class="field-label">再次確認 Email</label>
+                        <input type="email" id="emailConfirm" class="field-input" placeholder="請再次輸入同一個信箱"
+                            autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false"
+                            maxlength="254" aria-describedby="emailConfirmError" required>
+                        <p id="emailConfirmError" class="hidden field-error" role="alert"></p>
                     </div>
 
                     <div class="form-grid-2">
@@ -741,6 +761,11 @@
                     <p class="success-text">
                         感謝你的申請，我們收到了！<br>
                         將會在活動前透過 E-mail 通知您的申請結果，敬請留意。
+                    </p>
+                    <p id="mailDeliveryNotice" class="hidden mail-delivery-notice" role="status">
+                        報名資料已收件，但確認信的寄送狀態待確認。請勿重新報名，請透過
+                        <a href="mailto:hexlabai@gmail.com">Email 聯絡主辦單位</a>或
+                        <a href="https://ig.me/m/ntuaiclub" target="_blank" rel="noopener noreferrer">IG @ntuaiclub</a>確認或補寄。
                     </p>
                 </div>
 

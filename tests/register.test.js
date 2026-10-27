@@ -78,6 +78,54 @@ test('requires a nonempty background for unemployed applicants before forwarding
     }
 });
 
+test('rejects invalid emails and common domain typos before contacting GAS', async () => {
+    globalThis.fetch = async () => assert.fail('Invalid email must not contact GAS');
+    for (const email of ['name＠gmail.com', 'name@gmail,com', 'name@gmail.com.', 'name..last@gmail.com', 42]) {
+        const res = await submit({ email });
+        assert.equal(res.statusCode, 400);
+        assert.equal(res.body.code, 'INVALID_EMAIL');
+        assert.equal(res.body.field, 'email');
+    }
+    for (const email_typo_confirmed of [undefined, false, 'true', 1]) {
+        const res = await submit({ email: 'name@gmial.com', email_typo_confirmed });
+        assert.equal(res.statusCode, 400);
+        assert.equal(res.body.code, 'EMAIL_TYPO');
+        assert.equal(res.body.suggestion, 'name@gmail.com');
+    }
+});
+
+test('normalizes domain case, requires matching confirmation when provided and preserves an explicitly confirmed unusual domain', async () => {
+    const forwarded = [];
+    globalThis.fetch = async (_url, options) => {
+        forwarded.push(JSON.parse(options.body));
+        return Response.json({ status: 'success' });
+    };
+    const mismatch = await submit({ email: 'name@gmail.com', email_confirm: 'other@gmail.com' });
+    assert.equal(mismatch.statusCode, 400);
+    assert.equal(mismatch.body.code, 'EMAIL_CONFIRM_MISMATCH');
+    assert.equal(forwarded.length, 0);
+    assert.equal((await submit({ email: ' Name@GMAIL.COM ', email_confirm: 'Name@gmail.com' })).statusCode, 200);
+    assert.equal(forwarded[0].email, 'Name@gmail.com');
+    assert.equal(forwarded[0].email_confirm, 'Name@gmail.com');
+    assert.equal((await submit({ email: 'name@gmial.com', email_confirm: 'name@gmial.com', email_typo_confirmed: true })).statusCode, 200);
+    assert.equal(forwarded[1].email, 'name@gmial.com');
+});
+
+test('exposes mail submission status separately from a successfully saved registration', async () => {
+    globalThis.fetch = async () => Response.json({ status: 'success', mailSent: false, mailStatus: 'unknown' });
+    const res = await submit();
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(res.body, { ok: true, mailSent: false, mailStatus: 'unknown' });
+});
+
+test('returns explicit GAS pre-write email validation as a correctable rejection', async () => {
+    globalThis.fetch = async () => Response.json({ status: 'error', code: 'INVALID_EMAIL', message: 'Validation failed before write' });
+    const res = await submit();
+    assert.equal(res.statusCode, 400);
+    assert.equal(res.body.code, 'INVALID_EMAIL');
+    assert.equal(res.body.submissionStatus, undefined);
+});
+
 test('forwards canonical employed and recent graduate roles while preserving legacy professional compatibility', async () => {
     for (const role of ['employed', 'professional', 'recent_graduate']) {
         let forwarded;
