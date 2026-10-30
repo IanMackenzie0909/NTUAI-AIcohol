@@ -7,6 +7,10 @@ const originalError = console.error;
 const originalWarn = console.warn;
 const originalSetTimeout = globalThis.setTimeout;
 const originalAbortSignalTimeout = AbortSignal.timeout;
+const originalDateNow = Date.now;
+const originalTimezone = process.env.TZ;
+const registrationClosesAtMs = Date.parse('2026-10-31T23:59:00+08:00');
+let testNow;
 const originalGasUrl = process.env.GAS_SCRIPT_URL;
 const originalApiKey = process.env.API_KEY;
 let errors;
@@ -14,6 +18,8 @@ let waits;
 let warnings;
 
 beforeEach(() => {
+    testNow = Date.parse('2026-10-30T00:00:00Z');
+    Date.now = () => testNow;
     process.env.GAS_SCRIPT_URL = 'https://example.test/exec';
     process.env.API_KEY = 'unit-test-shared-secret';
     errors = [];
@@ -28,6 +34,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+    Date.now = originalDateNow;
+    if (originalTimezone === undefined) delete process.env.TZ;
+    else process.env.TZ = originalTimezone;
     globalThis.fetch = originalFetch;
     console.error = originalError;
     console.warn = originalWarn;
@@ -51,6 +60,87 @@ async function submit(extra = {}) {
     }, res);
     return res;
 }
+
+test('accepts one millisecond before Taiwan closing time and rejects at or after it without contacting GAS', async () => {
+    for (const offset of [-1, 0, 1]) {
+        let calls = 0;
+        testNow = registrationClosesAtMs + offset;
+        globalThis.fetch = async (_url, options) => {
+            calls++;
+            assert.equal(options.method, 'POST');
+            return Response.json({ status: 'success' });
+        };
+        const res = await submit();
+        if (offset < 0) {
+            assert.equal(res.statusCode, 200);
+            assert.equal(calls, 1);
+        } else {
+            assert.equal(res.statusCode, 403);
+            assert.deepEqual(res.body, { error: '報名已截止。', code: 'REGISTRATION_CLOSED', submissionStatus: 'not_saved' });
+            assert.equal(calls, 0);
+        }
+    }
+});
+
+test('checks closing again immediately before forwarding if validation crosses the boundary', async () => {
+    let reads = 0;
+    Date.now = () => reads++ === 0 ? registrationClosesAtMs - 1 : registrationClosesAtMs;
+    globalThis.fetch = async () => assert.fail('A request that closed before forwarding must not contact GAS');
+    const res = await submit();
+    assert.equal(res.statusCode, 403);
+    assert.equal(res.body.code, 'REGISTRATION_CLOSED');
+    assert.equal(res.body.submissionStatus, 'not_saved');
+});
+
+test('uses the same absolute Taiwan closing instant regardless of the server timezone', async () => {
+    assert.equal(registrationClosesAtMs, Date.parse('2026-10-31T15:59:00Z'));
+    for (const timezone of ['UTC', 'Asia/Taipei', 'America/Los_Angeles']) {
+        process.env.TZ = timezone;
+        for (const offset of [-1, 0, 1]) {
+            testNow = registrationClosesAtMs + offset;
+            let calls = 0;
+            globalThis.fetch = async () => { calls++; return Response.json({ status: 'success' }); };
+            const res = await submit();
+            assert.equal(res.statusCode, offset < 0 ? 200 : 403, timezone);
+            assert.equal(calls, offset < 0 ? 1 : 0, timezone);
+        }
+    }
+});
+
+test('maps a GAS explicit closed-before-write rejection to 403 through either a direct or ContentService response', async () => {
+    for (const redirect of [false, true]) {
+        let calls = 0;
+        globalThis.fetch = async (_url, options) => {
+            calls++;
+            if (redirect && options.method === 'POST') return new Response(null, { status: 302, headers: { location: resultUrl } });
+            return Response.json({ status: 'error', code: 'REGISTRATION_CLOSED', submissionStatus: 'not_saved', message: '報名已截止。' });
+        };
+        const res = await submit();
+        assert.equal(res.statusCode, 403);
+        assert.equal(res.body.code, 'REGISTRATION_CLOSED');
+        assert.equal(res.body.submissionStatus, 'not_saved');
+        assert.equal(calls, redirect ? 2 : 1);
+        assert.equal(errors.length, 0);
+    }
+});
+
+test('preserves an accepted registration when a direct or retried ContentService result arrives after closing', async () => {
+    for (const redirect of [false, true]) {
+        testNow = registrationClosesAtMs - 1;
+        const requests = [];
+        globalThis.fetch = async (_url, options) => {
+            requests.push(options.method);
+            testNow = registrationClosesAtMs + 100;
+            if (redirect && options.method === 'POST') return new Response(null, { status: 302, headers: { location: resultUrl } });
+            if (redirect && requests.length === 2) return new Response(null, { status: 404 });
+            return Response.json({ status: 'success', mailSent: true, mailStatus: 'sent' });
+        };
+        const res = await submit();
+        assert.equal(res.statusCode, 200);
+        assert.deepEqual(res.body, { ok: true, mailSent: true, mailStatus: 'sent' });
+        assert.deepEqual(requests, redirect ? ['POST', 'GET', 'GET'] : ['POST']);
+    }
+});
 
 test('accepts the actual GAS success response and uses the server secret', async () => {
     let forwarded;

@@ -50,6 +50,7 @@
     </script>
 
     <script src="action/email-validation.js" defer></script>
+    <script src="action/registration-window.js" defer></script>
     <script src="script.js" defer></script>
     <script src="action/feedback.js" defer></script>
     <script src="action/topics.js" defer></script>
@@ -547,7 +548,7 @@
     <section id="register">
         <div class="reg-card">
 
-            <div class="success-screen closed-screen hidden">
+            <div id="registrationClosedScreen" class="success-screen closed-screen hidden">
                 <div class="success-icon closed-icon">
                     <svg width="32" height="32" fill="none" stroke="#fbbf24" stroke-width="2.5" viewBox="0 0 24 24">
                         <rect x="4.5" y="10.5" width="15" height="10" rx="2" stroke-linecap="round"
@@ -555,10 +556,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 10.5V7a4 4 0 018 0v3.5" />
                     </svg>
                 </div>
-                <h2 class="success-heading">報名已截止</h2>
+                <h2 id="registrationClosedHeading" class="success-heading" tabindex="-1">報名已截止</h2>
                 <p class="success-text">
-                    感謝您的關注與支持！<br>
-                    期待下次再見。
+                    ^0^ 感謝您的關注與支持 ^0^<br>
+                    期待下次再見 ^_~
                 </p>
             </div>
 

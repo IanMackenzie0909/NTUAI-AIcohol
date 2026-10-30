@@ -1,3 +1,5 @@
+import '../public/action/registration-window.js';
+
 // api/recommend.js – Vercel Serverless Function
 // Calls Gemini to rank table preferences based on user profile
 // Environment variables required:
@@ -6,6 +8,10 @@
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    if (globalThis.RegistrationWindow.isClosed()) {
+        return res.status(403).json({ error: '報名已截止。', code: 'REGISTRATION_CLOSED', submissionStatus: 'not_saved' });
     }
 
     const { GEMINI_API_KEY } = process.env;
@@ -68,6 +74,9 @@ ${tableDescriptions}
 範例輸出：
 {"order": ${JSON.stringify(exampleOrder)}, "reason": "為 XXX(參與者姓名) 貴賓斟上一杯層次豐富的職涯佳釀。\\n首推【AI 資訊顧問】，探索如何以 AI 工具回應企業痛點。\\n接著，【AI 推論與基礎架構】帶您認識推論與開源協作的實戰。\\n此外，【創業與商業開拓】為您的職涯補上一抹從市場到產品的視野。\\n這份酒單是我們的推薦，您仍可以自行調整您的配方。"} `;
     try {
+        if (globalThis.RegistrationWindow.isClosed()) {
+            return res.status(403).json({ error: '報名已截止。', code: 'REGISTRATION_CLOSED', submissionStatus: 'not_saved' });
+        }
         const geminiRes = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${GEMINI_API_KEY}`,
             {

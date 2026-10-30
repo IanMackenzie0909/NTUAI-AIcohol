@@ -22,6 +22,7 @@ public/
     ├── feedback.js            # Feedback carousel and counter animations
     ├── page-motion.js         # Viewport reveals with readable fallbacks
     ├── email-validation.js    # Shared browser/API email format and domain typo checks
+    ├── registration-window.js # Shared browser/API registration closing time
     └── comeback.js            # Strong comeback headline entrance
 ```
 
@@ -43,6 +44,29 @@ the static HTML also stays readable when JavaScript is unavailable.
 ## 正式版部署
 
 正式官網：<https://ntuai-alcohol-round-ii.vercel.app/>。
+
+### 報名自動截止
+
+報名於 **台灣時間 2026/10/31 23:59:00 起關閉**（含該秒；UTC 為
+`2026-10-31T15:59:00Z`）。前端與 Vercel API 共用
+`public/action/registration-window.js`，GAS 對應時間在 `gas/Config.gs`。
+時間含明確 `+08:00`，不依執行環境的本地時區判斷，也不需要排程工作。
+
+網頁載入、留在頁面跨越截止、回到頁面及送出時都會檢查；截止後顯示
+「報名已截止」。Vercel 的報名與推薦 API 在截止後回覆 HTTP 403、
+`REGISTRATION_CLOSED`。GAS 另在驗證金鑰後及取得寫入鎖後檢查，
+避免舊頁面、直接呼叫或排隊跨越截止仍寫入新申請。
+是否受理以伺服器檢查為準，提早開啟或填好表單不會保留送出資格。
+
+截止前已受理的申請，即使確認信或結果在截止後才回來，仍保留成功結果；
+結果未知時保留原有查證提示。確認信連結仍顯示「申請已送出」，
+試算表的既有資料查核與補寄也可繼續使用。
+
+啟用本次設定需同時更新兩邊：將網站變更推送並部署到 Vercel，
+另將 `gas/Config.gs` 與 `gas/registration.gs` 更新至原 Apps Script 專案，
+儲存後於既有部署選「新版本」部署。若雲端仍是舊的單檔版，請先依
+`gas/README.md` 完成分檔更新。推送 GitHub 不會更新 GAS。
+兩邊部署完成後，截止時會自動生效，不需屆時再手動部署。
 
 ### Vercel 新專案設定
 
@@ -79,17 +103,20 @@ the static HTML also stays readable when JavaScript is unavailable.
 
 ### 更新 GAS 確認信
 
-本機完整程式為 `gas/registration.gs`。主按鈕已改成「AIcohol 活動官網 ➔」，
+GAS 已按功能拆分，完整檔案清單與一次性安裝步驟見 [`gas/README.md`](gas/README.md)。
+`registration.gs` 僅保留網站報名入口，信件內容在 `EmailTemplate.gs`。
+主按鈕已改成「AIcohol 活動官網 ➔」，
 指向 `https://ntuai-alcohol-round-ii.vercel.app/?from=confirmation#register`；
 Banner 保留 `AIcohol_intro.jpg`，改由正式官網提供。
 Logo 與頁尾的社群連結仍指向 NTUAI 各社群。
 
 信件入口會直接顯示原有的「申請已送出」畫面，隱藏填寫步驟，並將頁面上的
 「立即預約」改為「申請已送出」。活動內容仍可瀏覽；重新整理或轉傳完整連結
-都會保留這個畫面。一般官網入口仍顯示報名表單。
+都會保留這個畫面。一般官網入口在報名開放期間顯示報名表單，截止後顯示截止畫面。
 這是通用畫面切換，不會查驗報名、讀取個資或阻擋同一人從一般入口再次報名。
 
-1. 將該程式碼更新至 Google Apps Script 專案。
+1. 從原報名試算表「擴充功能 → Apps Script」開啟既有綁定專案，更新全部分檔；
+   將舊完整程式換成新的入口內容，避免在專案中重複保留輔助函式。
 2. 在「專案設定 → 指令碼屬性」確認 `API_KEY`、`SPREADSHEET_ID`、`SHEET_NAME`。
    後兩項分別是目標試算表 ID 與實際分頁名稱。
 3. 儲存後選「部署 → 管理部署 → 編輯 → 新版本 → 部署」。
@@ -119,18 +146,21 @@ GAS 保留 A:R 原報名欄位，S:Y 新增報名列識別值、寄信狀態、�
 嘗試時間與次數、錯誤代碼、寄出時間。資料已寫入但寄信異常時，網站仍顯示
 已收件，另提示聯絡主辦確認或補寄，避免再次報名。
 
-管理者更新 GAS 完整程式並部署新版本後，可在編輯器執行：
+管理者更新全部 GAS 分檔並儲存後，重新整理原試算表，就會出現「報名郵件管理」。
+網站 `/exec` 若也要套用拆分後版本，仍需編輯既有部署並選「新版本」。
+日常補寄直接在試算表操作：
 
-1. `auditRegistrationEmails()`：標記需要確認的信箱，不寄信。
-2. 向報名者確認正確地址，修正原資料列的 C 欄 `email`。
-3. 在指令碼屬性設定 `RESEND_ROW_NUMBERS`，例如 `2,5,8`（每次最多 10 列）。
-   舊資料的寄信結果為 `unknown`；確認要處理這些列後，另設 `RESEND_ALLOW_UNKNOWN=true`。
-4. 執行 `previewSelectedConfirmationEmails()`，核對預覽中的列號及是否符合補寄條件。
-5. 10 分鐘內執行 `resendSelectedConfirmationEmails()`，只對符合條件的既有列補寄，
-   不新增報名；完成後清除上述補寄選取設定。
+1. 向報名者確認正確地址，修正原資料列的 C 欄 `email`。
+2. 在主報名分頁選取要處理的資料列，每次最多 10 筆。
+3. 選「報名郵件管理 → 預覽與補寄選取列」，在側欄核對姓名、列號及實際信箱。
+4. 若有 `unknown` 舊紀錄，核對後勾選本次補寄確認，側欄會自動更新預覽。
+5. 按「確認補寄」，只處理符合條件的原資料列，不新增報名。
 
-預覽後的資料若改動，必須重新預覽。`sent` 且收件者未變的列會略過；
-`sending` 不會再次寄送。補寄工具只供管理者在 GAS 編輯器執行，沒有公開 HTTP 入口。
+新側欄不需要改 `RESEND_ROW_NUMBERS` 或 `RESEND_ALLOW_UNKNOWN`。
+預覽後若改動資料、排序或選取，必須重新預覽；每位管理者的預覽分開保存，
+有效 10 分鐘且只能使用一次。`sent` 且收件者未變的列會略過，`sending` 不會再次寄送。
+「檢查信箱（不寄信）」可在整張主表加上待確認註記。補寄工具沒有公開 HTTP 入口。
+試算表選單以目前登入的 Google 帳號寄信，請用原部署者帳號操作以維持寄件地址。
 Gmail 成功返回只代表寄送請求成功；地址不存在仍可能稍後退信。
 完整操作及狀態說明見 `docs/gas-email-recovery.md`（本機文件）。
 

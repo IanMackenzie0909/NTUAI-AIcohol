@@ -1,4 +1,5 @@
 import '../public/action/email-validation.js';
+import '../public/action/registration-window.js';
 
 // api/register.js – Vercel Serverless Function
 // Proxies registration data to Google Apps Script (Google Sheets backend)
@@ -73,6 +74,10 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
+    if (globalThis.RegistrationWindow.isClosed()) {
+        return res.status(403).json({ error: '報名已截止。', code: 'REGISTRATION_CLOSED', submissionStatus: 'not_saved' });
+    }
+
     const {
         GAS_SCRIPT_URL,
         API_KEY,
@@ -121,6 +126,10 @@ export default async function handler(req, res) {
 
     if (body.role === 'unemployed' && (typeof body.past_background !== 'string' || !body.past_background.trim())) {
         return res.status(400).json({ error: 'Missing or invalid field: past_background' });
+    }
+
+    if (globalThis.RegistrationWindow.isClosed()) {
+        return res.status(403).json({ error: '報名已截止。', code: 'REGISTRATION_CLOSED', submissionStatus: 'not_saved' });
     }
 
     // Forward to Google Apps Script
@@ -268,6 +277,12 @@ export default async function handler(req, res) {
             }
             failureReason = 'invalid_result_json';
             gasData = await gasRes.json();
+        }
+
+        // Only GAS's explicit pre-write rejection can close an in-flight registration.
+        // A successful write remains successful even if its response arrives after closing.
+        if (gasData?.status === 'error' && gasData.code === 'REGISTRATION_CLOSED') {
+            return res.status(403).json({ error: '報名已截止。', code: 'REGISTRATION_CLOSED', submissionStatus: 'not_saved' });
         }
 
         // These explicit validation codes are returned by GAS only before any write.

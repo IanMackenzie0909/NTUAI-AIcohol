@@ -188,6 +188,7 @@ function getStatusDetails() {
 // ─── Step navigation ──────────────────────────────────────────────────────
 function nextStep(step) {
     if (submissionState === 'success') return;
+    if (enforceRegistrationWindow(true)) return;
 
     if (step > currentStep) {
         let valid = true;
@@ -250,6 +251,7 @@ function nextStep(step) {
 // ─── AI recommendations (Gemini) ─────────────────────────────────────────
 async function generateSmartRecommendations() {
     if (submissionState !== 'idle') return;
+    if (enforceRegistrationWindow(true)) return;
 
     const motivation = document.getElementById('motivation').value;
     const status = userStatus.value;
@@ -293,13 +295,17 @@ async function generateSmartRecommendations() {
                 });
             }
         } else {
-            console.warn('Recommend API error', await res.text());
+            let errorData = null;
+            try { errorData = await res.json(); } catch { /* The default ranking remains available before closing. */ }
+            if (errorData?.code === 'REGISTRATION_CLOSED') registrationClosedByServer = true;
+            else console.warn('Recommend API error', res.status);
         }
     } catch (err) {
         console.warn('Recommend fetch error:', err);
     }
 
     document.getElementById('recomLoading').style.display = 'none';
+    if (enforceRegistrationWindow() || submissionState !== 'idle') return;
 
     if (isValidThemeOrder(order)) {
         sortedThemesResult = order.map(n => themes[n - 1]);
@@ -371,6 +377,58 @@ function renderRankingList() {
 }
 
 // ─── Form submit ──────────────────────────────────────────────────────────
+let registrationClosedByServer = false;
+let registrationCloseTimer = null;
+
+function focusRegistrationScreen(screen, headingId) {
+    document.getElementById(headingId).focus({ preventScroll: true });
+    // Let the collapsed form render before positioning the result content.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        screen.style.scrollMarginTop = `${document.getElementById('navbar').offsetHeight + 16}px`;
+        screen.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }));
+}
+
+function showRegistrationClosed(focus = false) {
+    // These states may represent a saved registration; never replace them with a rejection.
+    if (['success', 'sending', 'unknown'].includes(submissionState)) return;
+    const wasClosed = submissionState === 'closed';
+    const closedScreen = document.getElementById('registrationClosedScreen');
+    submissionState = 'closed';
+    document.getElementById('registrationForm').classList.add('hidden');
+    document.getElementById('successScreen').classList.add('hidden');
+    document.getElementById('resultMessage').classList.add('hidden');
+    closedScreen.classList.remove('hidden');
+    document.getElementById('submitBtn').disabled = true;
+    document.querySelectorAll('a[href="#register"]').forEach(link => { link.textContent = '報名已截止'; });
+    if (focus && !wasClosed) focusRegistrationScreen(closedScreen, 'registrationClosedHeading');
+}
+
+function enforceRegistrationWindow(focus = false) {
+    const closed = registrationClosedByServer || RegistrationWindow.isClosed();
+    if (closed) showRegistrationClosed(focus);
+    return closed;
+}
+
+function refreshRegistrationWindow() {
+    if (registrationCloseTimer !== null) clearTimeout(registrationCloseTimer);
+    registrationCloseTimer = null;
+    if (enforceRegistrationWindow()) return;
+    const remaining = RegistrationWindow.closesAtMs - Date.now();
+    registrationCloseTimer = setTimeout(refreshRegistrationWindow, Math.min(remaining, 2147483647));
+}
+
+function initializeRegistrationWindow() {
+    // This email entry selects a generic view; it does not verify a registration.
+    if (new URLSearchParams(window.location.search).get('from') === 'confirmation') showRegistrationSuccess();
+    refreshRegistrationWindow();
+    window.addEventListener('pageshow', refreshRegistrationWindow);
+    window.addEventListener('focus', refreshRegistrationWindow);
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) refreshRegistrationWindow();
+    });
+}
+
 function showRegistrationSuccess(mailSent, mailStatus) {
     const successScreen = document.getElementById('successScreen');
     submissionState = 'success';
@@ -385,18 +443,14 @@ function showRegistrationSuccess(mailSent, mailStatus) {
     document.querySelectorAll('a[href="#register"]').forEach(link => {
         link.textContent = '申請已送出';
     });
-    document.getElementById('successHeading').focus({ preventScroll: true });
-    // Let the collapsed form render before positioning the confirmation content.
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-        successScreen.style.scrollMarginTop = `${document.getElementById('navbar').offsetHeight + 16}px`;
-        successScreen.scrollIntoView({ behavior: 'instant', block: 'start' });
-    }));
+    focusRegistrationScreen(successScreen, 'successHeading');
 }
 
 document.getElementById('registrationForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     // A lost response can follow a successful write; do not submit it again.
     if (submissionState !== 'idle') return;
+    if (enforceRegistrationWindow(true)) return;
 
     const emailCheck = validateEmailFields({ requireValues: true });
     if (!emailCheck.valid) {
@@ -459,6 +513,14 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             // HTML, an empty response or invalid JSON cannot confirm a write.
         }
 
+        if (!res.ok && data?.code === 'REGISTRATION_CLOSED') {
+            // This explicit rejection confirms that the registration was not saved.
+            registrationClosedByServer = true;
+            submissionState = 'idle';
+            enforceRegistrationWindow(true);
+            return;
+        }
+
         if (!res.ok || data?.ok !== true) {
             retryableFailure = (res.status === 400 && typeof data?.error === 'string')
                 || (res.status === 500 && data?.error === 'Server misconfiguration');
@@ -489,6 +551,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         submitBtn.disabled = !retryableFailure;
         submitBtn.innerText = retryableFailure ? '確認後重新送出' : '請先確認報名狀態';
         if (rejectedEmailField) returnToEmailField(rejectedEmailField, rejectedEmailMessage);
+        if (retryableFailure) enforceRegistrationWindow();
     }
 });
 
@@ -525,7 +588,4 @@ window.addEventListener('resize', updateHeroAvatarMotion);
 toggleNavbarVisibility();
 updateHeroAvatarMotion();
 
-// This email entry selects a generic view; it does not verify a registration.
-if (new URLSearchParams(window.location.search).get('from') === 'confirmation') {
-    showRegistrationSuccess();
-}
+initializeRegistrationWindow();
